@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presente</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg-shapes" aria-hidden="true">
+    <span class="shape shape-1"></span>
+    <span class="shape shape-2"></span>
+    <span class="shape shape-3"></span>
+    <span class="shape shape-4"></span>
+  </div>
+
+  <!-- TELA INICIAL -->
+  <section id="screen-home" class="screen active">
+    <div class="card card-home">
+      <div class="gift-icon">
+        <!-- Substitua assets/gift-icon.svg pelo seu SVG -->
+        <img src="assets/gift-icon.svg" alt="" class="gift-svg" width="72" height="72">
+      </div>
+      <h1>Presente</h1>
+      <p class="subtitle">
+        Tem algo aqui.
+        <button type="button" class="secret-word" id="secret-trigger">Talvez</button>.
+      </p>
+      <button class="btn btn-primary" id="btn-open-gift">Abrir presente</button>
+      <p class="hint-text">ou talvez não seja tão simples assim...</p>
+    </div>
+  </section>
+
+  <!-- VERIFICAÇÃO ANTI-ROBÔ -->
+  <section id="screen-captcha" class="screen">
+    <div class="card card-captcha">
+      <div class="badge">Verificação de segurança</div>
+      <h2>Você é um robô?</h2>
+      <p class="question-text" id="captcha-question"></p>
+      <div class="options" id="captcha-options"></div>
+      <p class="captcha-feedback hidden" id="captcha-feedback"></p>
+      <p class="progress-text" id="captcha-progress"></p>
+    </div>
+  </section>
+
+  <!-- VERIFICAÇÃO DE IDADE -->
+  <section id="screen-age" class="screen">
+    <div class="card">
+      <div class="badge">Verificação de idade</div>
+      <h2>Confirme sua idade</h2>
+      <p class="question-text" id="age-question"></p>
+      <div class="options" id="age-options"></div>
+      <p class="progress-text" id="age-progress"></p>
+    </div>
+  </section>
+
+  <!-- MINI GAME -->
+  <section id="screen-game" class="screen">
+    <div class="card card-game">
+      <h2>Pegue os corações! 💕</h2>
+      <p class="game-instructions">Clique em <strong>10 corações</strong> antes do tempo acabar</p>
+      <div class="game-stats">
+        <span id="game-score">0 / 10</span>
+        <span id="game-timer">30s</span>
+      </div>
+      <div class="game-area" id="game-area"></div>
+      <button class="btn btn-primary hidden" id="btn-game-next">Continuar</button>
+    </div>
+  </section>
+
+  <!-- REVELAÇÃO -->
+  <section id="screen-reveal" class="screen">
+    <div class="card card-reveal">
+      <div class="reveal-emoji">😏</div>
+      <h2>Plot twist!</h2>
+      <p class="reveal-text">
+        Na real, você <em>não precisava</em> ter feito tudo isso.
+        Era só ter apertado a palavra <strong>"Talvez"</strong> na tela inicial
+        <strong>5 vezes seguidas</strong>.
+      </p>
+      <p class="reveal-sub">Mas hey, foi divertido, né?</p>
+      <div class="btn-group">
+        <button class="btn btn-primary" id="btn-back-home">Voltar ao início</button>
+        <button class="btn btn-secondary" id="btn-random">Parar pra beber água</button>
+      </div>
+      <p class="random-response hidden" id="random-response">Boa escolha! 💧</p>
+    </div>
+  </section>
+
+  <!-- SEGREDO: INTRO -->
+  <section id="screen-secret-intro" class="screen">
+    <div class="secret-intro-content" id="secret-intro-content">
+      <p class="secret-wait-text">
+        Finalmente você chegou aqui.<br>
+        Fiquei esperando por <span id="wait-time">0 segundos</span>.
+      </p>
+      <p class="secret-tap-hint">toque para continuar</p>
+    </div>
+  </section>
+
+  <!-- SEGREDO: LISTA -->
+  <section id="screen-secret-list" class="screen">
+    <div class="secret-list-container" id="secret-list-container">
+      <header class="secret-header">
+        <h1>101 coisas que eu provavelmente nunca te contei</h1>
+        <p class="secret-intro-text">
+          Preparei essa lista com muito carinho. Cada item é um pedacinho de mim que talvez você ainda não conheça.
+        </p>
+      </header>
+
+      <ol class="secret-list" id="secret-list">
+        <li>Eu conto nos dedos quantos dias faltam pro seu aniversário.</li>
+        <li>Tenho uma playlist secreta só com músicas que me lembram você.</li>
+        <li>Às vezes releio nossas conversas antes de dormir.</li>
+        <li>Guardo print de coisas engraçadas que você manda.</li>
+        <li>Meu lugar favorito no mundo é onde você está.</li>
+        <li>Eu rio sozinha lembrando de piadas internas nossas.</li>
+        <li>Tenho medo de te incomodar, mas mais medo de não te dizer o quanto você importa.</li>
+        <li>Sei exatamente como você gosta do café/chá.</li>
+        <li>Já pensei em mil formas de te surpreender.</li>
+        <li>Você é a primeira pessoa em quem penso quando algo bom acontece.</li>
+      </ol>
+
+      <footer class="secret-footer">
+        <p>
+          E se chegou até aqui sem fazer o caminho "oficial"... parabéns, você é mais esperto do que eu pensava. 💕
+        </p>
+      </footer>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>

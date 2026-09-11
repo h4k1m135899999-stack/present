@@ -1,0 +1,8 @@
+<!-- Substitua este SVG pelo seu -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect x="8" y="28" width="48" height="32" rx="4" fill="#e8879a"/>
+  <rect x="6" y="22" width="52" height="10" rx="3" fill="#d96f85"/>
+  <rect x="30" y="22" width="4" height="38" fill="#fce4ec"/>
+  <path d="M32 22 C32 22 20 8 14 12 C8 16 14 22 32 22 Z" fill="#b8a9c9"/>
+  <path d="M32 22 C32 22 44 8 50 12 C56 16 50 22 32 22 Z" fill="#b8a9c9"/>
+</svg>

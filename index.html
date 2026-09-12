@@ -14,8 +14,11 @@
    CONCEITO: uma correspondência escrita à mão.
    Mesa de kraft · papel · tinta · lacre de cera · carimbos.
    ========================================================== */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-
+*,*::before,*::after{
+  box-sizing:border-box;margin:0;padding:0;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-user-select:none;user-select:none;
+}
 :root{
   --kraft:#d7c9ac;
   --paper:#f7f1e0;
@@ -47,16 +50,15 @@ body{
   color:var(--ink);
   line-height:1.5;
   touch-action:manipulation;
+  -webkit-touch-callout:none;
   -webkit-font-smoothing:antialiased;
 }
-/* textura da mesa + vinheta */
 body::before{content:'';position:fixed;inset:0;background-image:var(--noise);opacity:.6;mix-blend-mode:multiply;pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;box-shadow:inset 0 0 150px rgba(58,48,35,.24)}
 
 button{font-family:inherit}
 button:focus-visible,[tabindex]:focus-visible{outline:2px dashed var(--wax);outline-offset:3px}
 .hidden{display:none!important}
-em{font-style:italic}
 
 /* ===== RASTREIO DA ENCOMENDA ===== */
 .tracker{
@@ -156,7 +158,6 @@ body[data-screen="secret-list"] .tracker{opacity:0}
 }
 .image-option:active{transform:scale(.95)}
 .image-option img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;border-radius:3px;user-select:none;-webkit-user-drag:none}
-/* fita crepe segurando a "foto" */
 .image-option::before{
   content:'';position:absolute;top:-9px;left:50%;z-index:2;
   transform:translateX(-50%) rotate(-4deg);
@@ -178,7 +179,6 @@ body[data-screen="secret-list"] .tracker{opacity:0}
 .stamp--warn{color:#96621c}
 @keyframes stampIn{from{transform:rotate(20deg) scale(2.3);opacity:0}to{transform:rotate(8deg) scale(1);opacity:1}}
 
-/* risco de caneta "X" */
 .xmark{position:absolute;inset:6px;width:calc(100% - 12px);height:calc(100% - 12px);pointer-events:none;z-index:3}
 .xmark path{stroke:var(--wax);stroke-width:5;stroke-linecap:round;fill:none;stroke-dasharray:34;stroke-dashoffset:34;animation:xdraw .22s ease forwards}
 .xmark path:nth-child(2){animation-delay:.18s}
@@ -219,7 +219,7 @@ body[data-screen="secret-list"] .tracker{opacity:0}
 .home-wrap{display:flex;flex-direction:column;align-items:center;text-align:center;width:100%;max-width:440px}
 .env-scene{position:relative;width:min(300px,76vw);margin-bottom:24px}
 .env-scene svg{display:block;width:100%;height:auto;overflow:visible}
-#env{cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;
+#env{cursor:pointer;-webkit-user-select:none;user-select:none;touch-action:manipulation;
   filter:drop-shadow(5px 7px 0 rgba(58,48,35,.18)) drop-shadow(0 20px 28px rgba(58,48,35,.18))}
 .fragile{
   position:absolute;top:-12px;right:0;transform:rotate(9deg);
@@ -270,7 +270,6 @@ body[data-screen="secret-list"] .tracker{opacity:0}
   background:var(--paper);box-shadow:var(--shadow-hard);
   touch-action:none;user-select:none;-webkit-user-select:none;
 }
-.board--night{background:var(--night);border-color:#10181e}
 .board canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 
 .game-overlay{
@@ -302,17 +301,38 @@ body[data-screen="secret-list"] .tracker{opacity:0}
 }
 .ctrl:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(58,48,35,.22)}
 .ctrl svg{width:16px;height:16px}
-.ctrl--fire{background:var(--wax);color:var(--cream);border-color:var(--wax-deep);box-shadow:0 3px 0 var(--wax-deep)}
 .gesture-tip{margin-top:12px;font:500 9.5px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
 
 /* ===== NÃO ME APERTE ===== */
 .card--dp{max-width:400px}
+.card--dp.shake{animation:dpShake .45s var(--ease)}
+@keyframes dpShake{
+  0%,100%{transform:translate(0,0) rotate(0)}
+  20%{transform:translate(-7px,2px) rotate(-.8deg)}
+  40%{transform:translate(6px,-2px) rotate(.7deg)}
+  60%{transform:translate(-4px,1px) rotate(-.4deg)}
+  80%{transform:translate(3px,-1px) rotate(.3deg)}
+}
+.dp-wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;margin:8px 0 18px}
 .dp-timer{
   font-weight:340;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1;
-  font-size:clamp(4rem,22vw,5.4rem);margin:8px 0 18px;transition:color .3s;
+  font-size:clamp(4rem,22vw,5.4rem);transition:color .3s;
 }
 .dp-timer.hot{color:var(--wax);animation:hotPulse .8s ease-in-out infinite}
 @keyframes hotPulse{50%{transform:scale(1.045)}}
+.dp-plus{
+  position:absolute;left:50%;top:-4px;transform:translateX(-50%);
+  font:800 13px var(--mono);color:var(--wax);pointer-events:none;
+  animation:dpPlus 1s var(--ease) forwards;white-space:nowrap;
+}
+@keyframes dpPlus{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,-40px)}}
+.dp-advice{
+  font:700 9px var(--mono);letter-spacing:.3em;text-transform:uppercase;color:var(--wax);
+  border:1.5px solid currentColor;border-radius:4px;padding:5px 8px 5px 12px;
+  transform:rotate(-2deg);display:inline-block;
+  -webkit-mask-image:var(--noise-strong);mask-image:var(--noise-strong);
+  animation:stampIn .3s var(--spring) both;
+}
 .btn-panic{
   width:100%;max-width:320px;margin:4px auto 0;display:block;position:relative;
   font:800 14px var(--mono);letter-spacing:.14em;text-transform:uppercase;
@@ -323,31 +343,35 @@ body[data-screen="secret-list"] .tracker{opacity:0}
 }
 .btn-panic::after{content:'';position:absolute;inset:6px;border:1px solid rgba(250,246,232,.45);border-radius:8px;pointer-events:none}
 .btn-panic:active{transform:translateY(4px);box-shadow:0 2px 0 var(--wax-deep),0 8px 16px rgba(58,48,35,.25)}
-.btn-panic.pressed{animation:shake .4s}
 .dp-msg{min-height:1.6em;margin-top:16px;font-style:italic;font-size:.95rem;color:var(--wax)}
 
-/* ===== A CARTA ===== */
+/* ===== A CARTA (texto sempre centrado na página) ===== */
 .sheet{
   position:relative;width:100%;max-width:520px;
+  max-height:calc(100dvh - 104px);overflow-y:auto;
   background-color:var(--paper);background-image:var(--noise);
   border:1px solid rgba(43,39,36,.5);border-radius:10px;
   box-shadow:var(--shadow-hard),var(--shadow-soft);
-  padding:54px 30px 44px;text-align:center;transform:rotate(-.4deg);
+  padding:44px 30px 40px;text-align:center;transform:rotate(-.4deg);
   animation:cardIn .55s var(--ease) both;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  min-height:min(560px,calc(100dvh - 120px));
 }
+.sheet::-webkit-scrollbar{width:4px}
+.sheet::-webkit-scrollbar-thumb{background:var(--paper-2);border-radius:6px}
 .dialogue-line{
   font-style:italic;font-weight:500;line-height:1.55;
-  font-size:clamp(1.25rem,5vw,1.7rem);min-height:5.4em;
+  font-size:clamp(1.25rem,5vw,1.7rem);
 }
 .dialogue-line.is-hl{color:var(--wax)}
 .ch{display:inline-block;opacity:0;transform:translateY(.4em);transition:opacity .35s var(--ease),transform .35s var(--ease)}
 .ch.in{opacity:1;transform:none}
 .ch.instant{transition-duration:.1s!important;transition-delay:0ms!important}
-.dialogue-hint{margin-top:34px;font:500 10px var(--mono);letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);opacity:0;transition:opacity .4s}
+.dialogue-hint{margin-top:36px;font:500 10px var(--mono);letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);opacity:0;transition:opacity .4s}
 .dialogue-hint.visible{animation:hintPulse 2.4s ease-in-out infinite}
 @keyframes hintPulse{0%,100%{opacity:.3}50%{opacity:.85}}
 .dialogue-actions{
-  margin-top:30px;display:flex;flex-direction:column;gap:10px;max-width:280px;margin-inline:auto;
+  margin-top:32px;display:flex;flex-direction:column;gap:10px;width:100%;max-width:280px;
   opacity:0;pointer-events:none;transform:translateY(8px);
   transition:opacity .5s var(--ease),transform .5s var(--ease);
 }
@@ -411,13 +435,13 @@ body[data-screen="secret-list"] .tracker{opacity:0}
   .card{padding:24px 16px}
   .tracker{font-size:8.5px;letter-spacing:.16em}
   .image-option::before{width:44px}
-  .sheet{padding:44px 20px 38px}
+  .sheet{padding:36px 20px 34px}
   .secret-list li{padding:13px 8px 13px 48px;font-size:.92rem}
   .secret-list li::before{width:26px;height:26px;font-size:10px;left:4px}
 }
 @media (max-height:700px){
   .card{padding:20px 16px}
-  .sheet{padding:38px 22px 32px}
+  .sheet{padding:30px 22px 28px;min-height:min(480px,calc(100dvh - 110px))}
   .ctrl{min-height:46px}
   .staff{margin-top:12px}
 }
@@ -445,7 +469,7 @@ body[data-screen="secret-list"] .tracker{opacity:0}
     </svg>
     <h2>Coloque seus <em>fones</em><br>de ouvido</h2>
     <p class="lead">Vai por mim — a música nem tá tão ruim.</p>
-    <button class="btn" id="btn-audio-start">Já coloquei os fones</button>
+    <button class="btn" id="btn-audio-start">Já cologuei os fones</button>
     <svg class="staff" viewBox="0 0 240 60" aria-hidden="true">
       <g stroke="rgba(43,39,36,.3)" stroke-width="1">
         <line x1="6" y1="12" x2="234" y2="12"/><line x1="6" y1="21" x2="234" y2="21"/>
@@ -559,7 +583,7 @@ body[data-screen="secret-list"] .tracker{opacity:0}
   <div class="card card--game card--ctrl">
     <div class="game-head">
       <span class="lives" id="bricks-lives"></span>
-      <span class="g-goal" id="bricks-goal">Nível 1 de 2</span>
+      <span class="g-goal" id="bricks-goal">Nível 1 de 3</span>
       <button class="icon-btn" id="bricks-pause" aria-label="Pausar">
         <svg viewBox="0 0 16 16" fill="none"><path d="M5.2 3.2v9.6M10.8 3.2v9.6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
       </button>
@@ -584,22 +608,23 @@ body[data-screen="secret-list"] .tracker{opacity:0}
         <svg viewBox="0 0 18 18" fill="none"><path d="M6.5 3.5 12 9l-5.5 5.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
+    <p class="gesture-tip">arraste a prancheta · envelopes que caem dão poderes</p>
   </div>
 </section>
 
-<!-- ===== COMBATE ESPACIAL ===== -->
-<section id="screen-shooter" class="screen">
+<!-- ===== ENTREGAS EXPRESSAS ===== -->
+<section id="screen-delivery" class="screen">
   <div class="card card--game card--ctrl">
     <div class="game-head">
-      <span class="g-score" id="shooter-score">Pontos 0 / 500</span>
-      <span class="lives" id="shooter-lives"></span>
-      <button class="icon-btn" id="shooter-pause" aria-label="Pausar">
+      <span class="g-score" id="delivery-score">Pontos 0 / 500</span>
+      <span class="lives" id="delivery-lives"></span>
+      <button class="icon-btn" id="delivery-pause" aria-label="Pausar">
         <svg viewBox="0 0 16 16" fill="none"><path d="M5.2 3.2v9.6M10.8 3.2v9.6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
       </button>
     </div>
-    <div class="board board--night" id="shooter-wrapper">
-      <canvas id="shooter-canvas"></canvas>
-      <div class="game-overlay" id="shooter-overlay">
+    <div class="board" id="delivery-wrapper">
+      <canvas id="delivery-canvas"></canvas>
+      <div class="game-overlay" id="delivery-overlay">
         <div class="ov-tag">
           <span class="ov-title"></span>
           <span class="ov-sub"></span>
@@ -609,24 +634,27 @@ body[data-screen="secret-list"] .tracker{opacity:0}
       </div>
     </div>
     <div class="controls">
-      <button class="ctrl" id="shooter-left" aria-label="Mover para a esquerda">
+      <button class="ctrl" id="delivery-left" aria-label="Mover para a esquerda">
         <svg viewBox="0 0 18 18" fill="none"><path d="M11.5 3.5 6 9l5.5 5.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <button class="ctrl ctrl--fire" id="shooter-fire">atirar</button>
-      <button class="ctrl" id="shooter-right" aria-label="Mover para a direita">
+      <button class="ctrl" id="delivery-right" aria-label="Mover para a direita">
         <svg viewBox="0 0 18 18" fill="none"><path d="M6.5 3.5 12 9l-5.5 5.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
+    <p class="gesture-tip">arraste o cesto · cartas somam, tesouras cortam</p>
   </div>
 </section>
 
 <!-- ===== NÃO ME APERTE ===== -->
 <section id="screen-dontpress" class="screen">
-  <div class="card card--dp">
+  <div class="card card--dp" id="dp-card">
     <span class="label label--wax">Aviso oficial</span>
     <h2>Não aperte o <em>botão</em></h2>
     <p class="question-text">Mas o que será que acontece se você <strong>apertar</strong>…</p>
-    <div class="dp-timer" id="dp-timer">10</div>
+    <div class="dp-wrap">
+      <div class="dp-timer" id="dp-timer">10</div>
+      <span class="dp-advice hidden" id="dp-advice">advertência I</span>
+    </div>
     <button class="btn-panic" id="btn-dontpress">Não me aperte!</button>
     <p class="dp-msg" id="dp-msg"></p>
   </div>
@@ -681,10 +709,7 @@ body[data-screen="secret-list"] .tracker{opacity:0}
 'use strict';
 /* ============================================================
    CONFIG — tudo editável fica aqui.
-   IMPORTANTE: as falas da carta não vieram no arquivo que
-   recebi (o texto corta no meio da classe SnakeGame).
-   Troque DIALOGUE_LINES pelas suas. Linhas com "*" ficam em
-   destaque (tinta vermelha).
+   Linhas da carta com "*" ganham destaque (tinta vermelha).
    ============================================================ */
 const CONFIG = {
   AUDIO_FILES: {
@@ -697,22 +722,24 @@ const CONFIG = {
   },
 
   DIALOGUE_LINES: [
-    'Pensou que tinha acabado, né?',
+    'Uau, eu achei q vc iria demorar um pouco mais',
     'Você passou pela verificação de humanidade, confirmou sua idade perante o CIC, venceu três jogos e ainda resistiu ao botão vermelho.',
-    'Tudo isso para chegar até aqui: uma carta escrita em HTML.',
+    'Tudo isso para chegar até aqui.',
     '*Feliz aniversário, K.',
     'Agora você pode voltar ao início e rever tudo — ou parar um pouco para beber água.',
-    '*E só por curiosidade: o lacre do envelope esconde mais uma coisa. Ele responde à persistência.'
+    '*E só por curiosidade: o lacre do envelope é um botão, pq não aperta ele algumas vezes?'
   ],
 
+  // Mensagens do "não me aperte": a 1ª apertada, a 2ª, ... (a última se repete).
   DONT_PRESS: [
-    'Eu tinha avisado pra não apertar.',
-    'Sério? De novo?',
-    'O botão já perdeu as contas de quantas vezes.',
-    'Você confia demais nos botões.',
-    'Respira. São só dez segundos.',
-    'Persistente, hein.',
-    'O botão pediu para não citar nomes, mas está decepcionado.'
+    'Aviso registrado. E o relógio também: +10 segundos.',
+    'É isso mesmo: cada apertada SOMA dez segundos. A matemática não perdoa.',
+    'O botão está começando a levar isso pro lado pessoal.',
+    'Você sabe que dá pra simplesmente… não apertar, né?',
+    'O botão pediu transferência. O pedido foi negado.',
+    'Dez segundos de paciência. Era tudo que ele pedia.',
+    'Nem o CIC pode te salvar agora.',
+    'O botão já não sente mais nada. Aperte. Veja se eu importo. (Somo +10s, sempre.)'
   ],
 
   WATER_RESPONSES: [
@@ -727,10 +754,15 @@ const CONFIG = {
 const $ = id => document.getElementById(id);
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const rand = (a, b) => a + Math.random() * (b - a);
+function toRoman(n){
+  const map = [[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];
+  let s = '';
+  for(const [v, r] of map){ while(n >= v){ s += r; n -= v; } }
+  return s || 'I';
+}
 
 /* ============================================================
-   ÁUDIO — mesma arquitetura do seu original:
-   arquivo com loop + fallback sintetizado via WebAudio
+   ÁUDIO — arquivos com fallback sintetizado via WebAudio
    ============================================================ */
 class AudioManager {
   constructor(){ this.ctx=null; this.el=null; this.type=null; this.playing=false; this.timer=null; this.volume=.3; this._fb=null; }
@@ -866,7 +898,7 @@ const SFX = {
 };
 
 /* ============================================================
-   ESTADO GLOBAL + PERGUNTAS (conteúdo do original, intacto)
+   ESTADO GLOBAL + PERGUNTAS (conteúdo original, intacto)
    ============================================================ */
 const appStartTime = Date.now();
 const SECRET_TAPS_NEEDED = 5;
@@ -932,14 +964,15 @@ const ageQuestions = [
    ============================================================ */
 const MUSIC = {
   'screen-home':'calm', 'screen-captcha':'tense', 'screen-age':'tense',
-  'screen-snake':'game', 'screen-bricks':'game', 'screen-shooter':'game',
+  'screen-snake':'game', 'screen-bricks':'game', 'screen-delivery':'game',
   'screen-dontpress':'tension', 'screen-reveal-dialogue':'reveal',
   'screen-secret-intro':'reveal', 'screen-secret-list':'secret_list'
 };
 const TRACK = {
   'audio':[1,'Preparativos'], 'home':[2,'Encomenda recebida'],
   'captcha':[3,'Verificação'], 'age':[3,'Verificação'],
-  'snake':[4,'Provas de habilidade'], 'bricks':[4,'Provas de habilidade'], 'shooter':[4,'Provas de habilidade'],
+  'snake':[4,'Provas de habilidade'], 'bricks':[4,'Provas de habilidade'],
+  'delivery':[4,'Provas de habilidade'],
   'dontpress':[5,'Teste de paciência'], 'reveal-dialogue':[6,'A carta']
 };
 let navLock = false;
@@ -951,7 +984,7 @@ const HOOKS = {
     'screen-age': () => mountAge(),
     'screen-snake': () => snake.enter(),
     'screen-bricks': () => bricks.enter(),
-    'screen-shooter': () => shooter.enter(),
+    'screen-delivery': () => delivery.enter(),
     'screen-dontpress': () => startDontPress(),
     'screen-reveal-dialogue': () => startDialogue(),
     'screen-secret-intro': () => { $('wait-time').textContent = formatWaitTime(Date.now() - appStartTime); },
@@ -960,7 +993,7 @@ const HOOKS = {
   leave: {
     'screen-snake': () => snake.leave(),
     'screen-bricks': () => bricks.leave(),
-    'screen-shooter': () => shooter.leave(),
+    'screen-delivery': () => delivery.leave(),
     'screen-dontpress': () => stopDontPress(),
     'screen-reveal-dialogue': () => stopDialogue()
   }
@@ -1008,11 +1041,11 @@ function formatWaitTime(ms){
 }
 
 /* ============================================================
-   CONFETE (pedaços de papel da paleta)
+   CONFETE
    ============================================================ */
 let confettiPieces = [], confettiRaf = 0;
-function confetti(x, y, count = 24){
-  const colors = ['#b1372b','#bd8f34','#5f7048','#2c3a46','#f2e9d4'];
+function confetti(x, y, count = 24, palette){
+  const colors = palette || ['#b1372b','#bd8f34','#5f7048','#2c3a46','#f2e9d4'];
   for(let i=0;i<count;i++){
     const e = document.createElement('div');
     e.className = 'confetti';
@@ -1036,8 +1069,7 @@ function stepConfetti(){
 }
 
 /* ============================================================
-   QUIZES — lógica idêntica à do seu original,
-   com carimbos e riscos de caneta como feedback visual
+   QUIZES — lógica idêntica ao original + carimbos/riscos
    ============================================================ */
 function stampOn(btn, kind, label){
   if(btn.querySelector('.stamp')) return;
@@ -1236,7 +1268,7 @@ function renderLives(el, n){
     el.appendChild(d);
   }
 }
-const NEXT = { 'screen-snake':'screen-bricks', 'screen-bricks':'screen-shooter', 'screen-shooter':'screen-dontpress' };
+const NEXT = { 'screen-snake':'screen-bricks', 'screen-bricks':'screen-delivery', 'screen-delivery':'screen-dontpress' };
 function gotoNext(fromId){ transitionTo(fromId, NEXT[fromId]); }
 
 class GameOverlay{
@@ -1248,40 +1280,41 @@ class GameOverlay{
     this.skip = root.querySelector('.ov-skip');
   }
   show({title, sub='', btn='continuar', onBtn, skip}){
-      this.title.textContent = title;
-      this.sub.textContent = sub;
-      this.btn.textContent = btn;
-      this.btn.onclick = () => {
-          SFX.blip();
-          this.btn.blur();
-          // Esconde o overlay antes de iniciar/continuar o jogo
-          this.hide();
-          onBtn && onBtn();
+    this.title.textContent = title;
+    this.sub.textContent = sub;
+    this.btn.textContent = btn;
+
+    this.btn.onclick = () => {
+      SFX.blip();
+      this.btn.blur();
+
+      // Esconde o overlay
+      this.hide();
+
+      // Depois inicia/continua o jogo
+      onBtn && onBtn();
+    };
+
+    if(skip){
+      this.skip.style.display = '';
+      this.skip.onclick = () => {
+        SFX.blip();
+        this.skip.blur();
+        skip();
       };
-      if(skip){
-          this.skip.style.display = '';
-          this.skip.onclick = () => {
-              SFX.blip();
-              this.skip.blur();
-              skip();
-          };
-      } else {
-          this.skip.style.display = 'none';
-      }
-      this.root.classList.add('show');
+    } else {
+      this.skip.style.display = 'none';
+    }
+
+    this.root.classList.add('show');
   }
   hide(){ this.root.classList.remove('show'); }
 }
 
-/* teclado (bônus para desktop) */
 const keys = {l:false, r:false};
 
 /* ============================================================
-   JOGO: COBRINHA — reescrita à prova de bugs:
-   · fila de direções (sem giro de 180° em um tick)
-   · regra da cauda (pode entrar onde a cauda vai sair)
-   · comida nunca nasce sobre a cobra
-   · acumulador de tempo (velocidade independente do FPS)
+   JOGO: COBRINHA (inalterado nesta rodada)
    ============================================================ */
 class SnakeGame{
   constructor(){
@@ -1400,14 +1433,12 @@ class SnakeGame{
     const c = this.ctx;
     c.clearRect(0,0,400,400);
     c.fillStyle = '#f6efdc'; c.fillRect(0,0,400,400);
-    // grade de papel quadriculado
     c.strokeStyle = 'rgba(43,39,36,.065)'; c.lineWidth = 1; c.beginPath();
     for(let i=1;i<20;i++){
       c.moveTo(i*20+.5,0); c.lineTo(i*20+.5,400);
       c.moveTo(0,i*20+.5); c.lineTo(400,i*20+.5);
     }
     c.stroke();
-    // ondas ao comer
     this.fx = this.fx.filter(f => f.a > 0);
     this.fx.forEach(f => {
       f.r += 1.6; f.a -= .04;
@@ -1415,13 +1446,11 @@ class SnakeGame{
       c.lineWidth = 2;
       c.beginPath(); c.arc(f.x,f.y,f.r,0,7); c.stroke();
     });
-    // comida
     const fxp = this.food.x*20+10, fyp = this.food.y*20+10, pul = 1+Math.sin(t/300)*.12;
     c.fillStyle = '#b1372b';
     c.beginPath(); c.arc(fxp,fyp,6.5*pul,0,7); c.fill();
     c.fillStyle = 'rgba(250,246,232,.7)';
     c.beginPath(); c.arc(fxp-2,fyp-2,1.8,0,7); c.fill();
-    // cobra como traço de tinta
     const pts = this.snake.map(s => ({x:s.x*20+10, y:s.y*20+10}));
     c.strokeStyle = '#2c3a46'; c.lineWidth = 14; c.lineCap='round'; c.lineJoin='round';
     c.beginPath(); c.moveTo(pts[0].x,pts[0].y);
@@ -1431,7 +1460,6 @@ class SnakeGame{
     c.beginPath(); c.moveTo(pts[0].x,pts[0].y);
     for(let i=1;i<pts.length;i++) c.lineTo(pts[i].x,pts[i].y);
     c.stroke();
-    // cabeça + olhos
     const hd = pts[0];
     c.fillStyle = '#2c3a46';
     c.beginPath(); c.arc(hd.x,hd.y,9.5,0,7); c.fill();
@@ -1445,8 +1473,37 @@ class SnakeGame{
 }
 
 /* ============================================================
-   JOGO: QUEBRA-TIJOLOS (com sub-passos: a bola nunca atravessa)
+   JOGO: QUEBRA-TIJOLOS — 3 níveis com formas diferentes,
+   tijolos que racham (2 batidas) e envelopes de poder.
+   '.' vazio · '1' uma batida · '2' duas batidas
    ============================================================ */
+const BRICK_LEVELS = [
+  { name:'a abertura', speed:295, sway:0, map:[
+    '11111111111',
+    '11111111111',
+    '22222222222',
+    '11111111111'
+  ]},
+  { name:'o coração', speed:330, sway:0, map:[
+    '.11.....11.',
+    '1111...1111',
+    '11111111111',
+    '11111111111',
+    '.111111111.',
+    '..1111111..',
+    '...11111...',
+    '....222....'
+  ]},
+  { name:'a maré alta', speed:355, sway:14, map:[
+    '1.1.1.1.1.1',
+    '2.2.2.2.2.2',
+    '1.1.1.1.1.1',
+    '22222222222',
+    '1.1.1.1.1.1',
+    '2.2.2.2.2.2'
+  ]}
+];
+
 class BricksGame{
   constructor(){
     this.cv = $('bricks-canvas');
@@ -1455,96 +1512,184 @@ class BricksGame{
     this.livesEl = $('bricks-lives');
     this.goalEl = $('bricks-goal');
     this.ov = new GameOverlay($('bricks-overlay'));
-    this.L = [{rows:4,cols:6,speed:290},{rows:5,cols:7,speed:350}];
-    this.colors = ['#b1372b','#bd8f34','#5f7048','#2c3a46'];
+    this.rowColors = ['#b1372b','#bd8f34','#5f7048','#2c3a46'];
     this.bindInput();
     holdButton($('bricks-left'),  v => this.mvL = v);
     holdButton($('bricks-right'), v => this.mvR = v);
     holdButton($('bricks-fire'),  v => { if(v) this.launch(); });
     $('bricks-pause').addEventListener('click', () => this.togglePause());
   }
-  enter(){ this.level = 0; this.lives = 3; this.reset(); this.intro(); this.loop(); }
+  enter(){ this.level = 0; this.lives = 3; this.score = 0; this.reset(); this.intro(); this.loop(); }
   leave(){ runner.halt(); }
   reset(){
-    const L = this.L[this.level];
-    this.paddle = {w:88, h:12, x:156, y:370};
-    this.ball = {x:200, y:352, vx:0, vy:0, r:7, stuck:true};
+    const L = BRICK_LEVELS[this.level];
+    this.paddle = {x:156, y:370, h:12};
+    this.pw = 88; // largura animada
+    this.balls = [{x:200, y:352, vx:0, vy:0, r:7, stuck:true}];
     this.speed = L.speed;
-    this.bricks = []; this.pop = [];
+    this.bricks = []; this.pop = []; this.pus = []; this.floaters = [];
+    this.fxWide = 0; this.fxSlow = 0;
+    this.swayT = 0;
     this.mvL = this.mvR = false; this.paused = true;
     this.build(L); this.updateHud();
   }
   build(L){
-    const m = 16, g = 8, bw = (400-2*m-(L.cols-1)*g)/L.cols, bh = 18;
-    for(let j=0;j<L.rows;j++) for(let i=0;i<L.cols;i++)
-      this.bricks.push({x:m+i*(bw+g), y:44+j*(bh+g), w:bw, h:bh, color:this.colors[j%this.colors.length], alive:true});
+    const cols = 11, m = 14, g = 7, bh = 17;
+    const bw = (400 - 2*m - (cols-1)*g) / cols;
+    L.map.forEach((row, j) => {
+      for(let i=0;i<cols;i++){
+        const ch = row[i];
+        if(ch === '.' || ch === undefined) continue;
+        const hp = +ch;
+        this.bricks.push({
+          bx: m + i*(bw+g), x: 0, y: 44 + j*(bh+g),
+          w: bw, h: bh, hp, maxHp: hp,
+          color: hp === 2 ? '#7d5a22' : this.rowColors[j % this.rowColors.length],
+          row: j, alive: true, wasTwo: hp === 2
+        });
+      }
+    });
+    this.applySway(0);
+  }
+  applySway(t){
+    const L = BRICK_LEVELS[this.level];
+    for(const br of this.bricks){
+      br.x = L.sway ? br.bx + Math.sin(t*1.6 + br.row*.8) * L.sway : br.bx;
+    }
   }
   intro(){
     this.ov.show({
-      title:'Quebra-tijolos', sub:'arraste para mover · toque para lançar',
+      title:'Quebra-tijolos', sub:'arraste para mover · pegue os envelopes que caem',
       btn:'começar',
       onBtn:()=>{ this.paused=false; },
       skip:()=>gotoNext('screen-bricks')
     });
   }
   launch(){
-    if(this.paused || !this.ball.stuck) return;
-    const a = rand(-.5,.5);
-    this.ball.stuck = false;
-    this.ball.vx = Math.sin(a)*this.speed*.55;
-    this.ball.vy = -Math.cos(a)*this.speed;
-    SFX.launch();
+    if(this.paused) return;
+    let launched = false;
+    for(const b of this.balls){
+      if(!b.stuck) continue;
+      const a = rand(-.45,.45);
+      b.stuck = false;
+      b.vx = Math.sin(a)*this.speed*.55;
+      b.vy = -Math.cos(a)*this.speed;
+      launched = true;
+    }
+    if(launched) SFX.launch();
   }
   loop(){
-    runner.run(dt => { if(!this.paused) this.update(dt); this.draw(); });
+    runner.run((dt,t) => { if(!this.paused) this.update(dt,t); this.draw(t); });
   }
-  update(dt){
-    const p = this.paddle, b = this.ball;
+  update(dt, t){
+    const p = this.paddle;
     if(this.mvL || keys.l) p.x -= 430*dt;
     if(this.mvR || keys.r) p.x += 430*dt;
-    p.x = clamp(p.x, 6, 400-6-p.w);
-    if(b.stuck){ b.x = p.x+p.w/2; b.y = p.y-b.r-1; return; }
-    // sub-passos para a bola não atravessar paddle/tijolos
-    const steps = Math.max(1, Math.ceil(Math.hypot(b.vx,b.vy)*dt/7));
-    const h = dt/steps;
-    for(let i=0;i<steps;i++){ if(this.ballStep(h)) break; }
+    this.pw += ((this.fxWide>0 ? 132 : 88) - this.pw) * Math.min(1, dt*6);
+    p.x = clamp(p.x, 6, 400-6-this.pw);
+    this.fxWide = Math.max(0, this.fxWide-dt);
+    this.fxSlow = Math.max(0, this.fxSlow-dt);
+    this.swayT += dt;
+    if(BRICK_LEVELS[this.level].sway) this.applySway(this.swayT);
+    // bolas presas seguem a prancheta
+    for(const b of this.balls){
+      if(b.stuck){ b.x = p.x+this.pw/2; b.y = p.y-b.r-1; }
+    }
+    // física com sub-passos
+    const f = this.fxSlow > 0 ? .66 : 1;
+    for(const b of this.balls){
+      if(b.stuck) continue;
+      const steps = Math.max(1, Math.ceil(Math.hypot(b.vx,b.vy)*f*dt/7));
+      const h = dt/steps;
+      for(let i=0;i<steps && !b.dead;i++) this.ballStep(b, h*f);
+    }
+    this.balls = this.balls.filter(b => !b.dead);
+    if(this.balls.length === 0 && !this.paused) this.loseLife();
+    // envelopes de poder caindo
+    this.pus = this.pus.filter(pu => {
+      pu.t += dt; pu.y += 130*dt;
+      if(pu.y > p.y-10 && pu.y < p.y+16 && pu.x > p.x-8 && pu.x < p.x+this.pw+8){
+        this.applyPower(pu.type);
+        return false;
+      }
+      return pu.y < 420;
+    });
+    this.floaters = this.floaters.filter(fl => { fl.y -= 32*dt; fl.a -= dt*1.1; return fl.a > 0; });
+    this.pop = this.pop.filter(pp => pp.a > 0);
   }
-  ballStep(h){
-    const b = this.ball, p = this.paddle;
-    if(b.stuck){ b.x = p.x+p.w/2; b.y = p.y-b.r-1; return true; }
+  ballStep(b, h){
+    const p = this.paddle;
     b.x += b.vx*h; b.y += b.vy*h;
     if(b.x < b.r+4){ b.x = b.r+4; b.vx = Math.abs(b.vx); SFX.blip(300,.05,.03); }
     if(b.x > 400-b.r-4){ b.x = 400-b.r-4; b.vx = -Math.abs(b.vx); SFX.blip(300,.05,.03); }
     if(b.y < b.r+4){ b.y = b.r+4; b.vy = Math.abs(b.vy); SFX.blip(300,.05,.03); }
-    if(b.vy > 0 && b.y+b.r >= p.y && b.y+b.r <= p.y+p.h+10 && b.x >= p.x-b.r && b.x <= p.x+p.w+b.r){
-      const rel = clamp((b.x-(p.x+p.w/2))/(p.w/2), -1, 1), ang = rel*1.05;
+    if(b.vy > 0 && b.y+b.r >= p.y && b.y+b.r <= p.y+p.h+10 && b.x >= p.x-b.r && b.x <= p.x+this.pw+b.r){
+      const rel = clamp((b.x-(p.x+this.pw/2))/(this.pw/2), -1, 1), ang = rel*1.05;
       b.vx = Math.sin(ang)*this.speed; b.vy = -Math.cos(ang)*this.speed;
       b.y = p.y-b.r-1; SFX.blip(220,.07,.04);
     }
-    if(b.y > 410){ this.loseLife(); return true; }
+    if(b.y > 410){ b.dead = true; return; }
     for(const br of this.bricks){
       if(!br.alive) continue;
       const nx = clamp(b.x, br.x, br.x+br.w), ny = clamp(b.y, br.y, br.y+br.h);
       if((b.x-nx)*(b.x-nx)+(b.y-ny)*(b.y-ny) <= b.r*b.r){
-        br.alive = false;
-        this.pop.push({x:br.x, y:br.y, w:br.w, h:br.h, color:br.color, a:1});
         const cx = br.x+br.w/2, cy = br.y+br.h/2;
         if(Math.abs(b.x-cx)/br.w > Math.abs(b.y-cy)/br.h) b.vx = -b.vx; else b.vy = -b.vy;
-        SFX.blip(520+rand(0,120),.06,.04);
+        this.hitBrick(br);
         break;
       }
     }
-    if(!this.bricks.some(x => x.alive)){ this.levelUp(); return true; }
-    return false;
+    if(!this.bricks.some(x => x.alive)) this.levelUp();
+  }
+  hitBrick(br){
+    this.score += 10;
+    if(br.hp > 1){
+      br.hp--;
+      SFX.blip(320,.07,.04);
+      this.updateHud();
+      return;
+    }
+    br.alive = false;
+    this.pop.push({x:br.x, y:br.y, w:br.w, h:br.h, color:br.color, a:1});
+    SFX.blip(520+rand(0,120),.06,.04);
+    if(Math.random() < .16){
+      const types = ['wide','multi','slow'];
+      this.pus.push({x:br.x+br.w/2, y:br.y+br.h/2, t:0, type:types[(Math.random()*types.length)|0]});
+    }
+    this.updateHud();
+  }
+  applyPower(type){
+    SFX.blip(980,.12,.05);
+    const names = { wide:'prancheta larga', multi:'três bolas', slow:'bola lenta' };
+    this.floaters.push({x:this.paddle.x+this.pw/2, y:352, text:names[type], color:'#5f7048', a:1});
+    if(type === 'wide') this.fxWide = 12;
+    else if(type === 'slow') this.fxSlow = 8;
+    else if(type === 'multi'){
+      const ref = this.balls.find(b => !b.stuck);
+      const src = ref || this.balls[0];
+      const ang0 = Math.atan2(src.vy || -1, src.vx || 0);
+      const sp = this.speed;
+      for(const da of [-.6, .6]){
+        this.balls.push({
+          x: src.x, y: src.y, r:7, stuck:false, dead:false,
+          vx: Math.cos(ang0+da)*sp, vy: Math.sin(ang0+da)*sp
+        });
+      }
+    }
   }
   levelUp(){
+    if(this.paused) return;
     this.paused = true; this.level++;
-    if(this.level >= this.L.length){
+    if(this.level >= BRICK_LEVELS.length){
       SFX.win();
-      this.ov.show({title:'Prova cumprida', sub:'todos os tijolos foram pro chão', btn:'continuar', onBtn:()=>gotoNext('screen-bricks')});
-    } else {
       this.ov.show({
-        title:'Nível limpo', sub:`indo para o nível ${this.level+1} de ${this.L.length}`,
+        title:'Prova cumprida', sub:`${this.score} pontos · três tabelas no chão`,
+        btn:'continuar', onBtn:()=>gotoNext('screen-bricks')
+      });
+    } else {
+      SFX.win();
+      this.ov.show({
+        title:'Tabela limpa', sub:`próxima: ${BRICK_LEVELS[this.level].name}`,
         btn:'continuar', onBtn:()=>{ this.reset(); this.paused=false; }
       });
     }
@@ -1556,15 +1701,17 @@ class BricksGame{
       this.ov.show({
         title:'Game over', sub:'a bola fugiu de vez',
         btn:'tentar de novo',
-        onBtn:()=>{ this.level=0; this.lives=3; this.reset(); this.paused=false; }
+        onBtn:()=>{ this.level=0; this.lives=3; this.score=0; this.reset(); this.paused=false; }
       });
-    } else this.ball.stuck = true;
+    } else {
+      this.balls = [{x:this.paddle.x+this.pw/2, y:352, vx:0, vy:0, r:7, stuck:true}];
+    }
   }
   togglePause(){
     if(this.paused) return;
     this.paused = true;
     this.ov.show({
-      title:'Pausado', sub:`nível ${this.level+1} de ${this.L.length}`,
+      title:'Pausado', sub:`nível ${this.level+1} de ${BRICK_LEVELS.length}`,
       btn:'continuar', onBtn:()=>{ this.paused=false; },
       skip:()=>gotoNext('screen-bricks')
     });
@@ -1580,7 +1727,7 @@ class BricksGame{
       if(Math.hypot(e.clientX-down.x, e.clientY-down.y) > 12) down.moved = true;
       const r = this.cv.getBoundingClientRect();
       const px = (e.clientX-r.left)/r.width*400;
-      this.paddle.x = clamp(px-this.paddle.w/2, 6, 400-6-this.paddle.w);
+      this.paddle.x = clamp(px-this.pw/2, 6, 400-6-this.pw);
     });
     w.addEventListener('pointerup', () => {
       if(down && !down.moved && performance.now()-down.t < 300) this.launch();
@@ -1590,171 +1737,257 @@ class BricksGame{
   }
   updateHud(){
     renderLives(this.livesEl, this.lives);
-    this.goalEl.textContent = `Nível ${this.level+1} de ${this.L.length}`;
+    this.goalEl.textContent = `Nível ${this.level+1} de ${BRICK_LEVELS.length}`;
   }
-  draw(){
+  draw(t){
     const c = this.ctx;
     c.clearRect(0,0,400,400);
     c.fillStyle = '#f6efdc'; c.fillRect(0,0,400,400);
+    // tijolos
     for(const br of this.bricks){
       if(!br.alive) continue;
       c.fillStyle = 'rgba(58,48,35,.18)'; c.fillRect(br.x+2, br.y+3, br.w, br.h);
       c.fillStyle = br.color; c.fillRect(br.x, br.y, br.w, br.h);
       c.strokeStyle = 'rgba(43,39,36,.55)'; c.lineWidth = 1.5;
       c.strokeRect(br.x+.5, br.y+.5, br.w-1, br.h-1);
-      c.fillStyle = 'rgba(250,246,232,.25)'; c.fillRect(br.x+3, br.y+3, br.w-6, 3);
+      c.fillStyle = 'rgba(250,246,232,.22)'; c.fillRect(br.x+3, br.y+3, br.w-6, 3);
+      if(br.hp > 1){ // hachura: tijolo reforçado
+        c.strokeStyle = 'rgba(250,246,232,.4)'; c.lineWidth = 1;
+        c.beginPath();
+        for(let x=br.x+4; x<br.x+br.w-2; x+=6){
+          c.moveTo(x, br.y+br.h-3); c.lineTo(x+4, br.y+3);
+        }
+        c.stroke();
+      } else if(br.wasTwo){ // rachado após a primeira batida
+        c.strokeStyle = 'rgba(250,246,232,.65)'; c.lineWidth = 1.2;
+        c.beginPath();
+        c.moveTo(br.x+br.w*.3, br.y+2);
+        c.lineTo(br.x+br.w*.42, br.y+br.h*.5);
+        c.lineTo(br.x+br.w*.3, br.y+br.h-2);
+        c.moveTo(br.x+br.w*.66, br.y+2);
+        c.lineTo(br.x+br.w*.58, br.y+br.h*.55);
+        c.stroke();
+      }
     }
-    this.pop = this.pop.filter(p => p.a > 0);
-    this.pop.forEach(p => {
-      p.a -= .06;
-      c.globalAlpha = Math.max(0,p.a);
-      c.strokeStyle = p.color; c.lineWidth = 2;
-      c.strokeRect(p.x, p.y, p.w, p.h);
+    // estilhaços
+    this.pop.forEach(pp => {
+      pp.a -= .06;
+      c.globalAlpha = Math.max(0,pp.a);
+      c.strokeStyle = pp.color; c.lineWidth = 2;
+      c.strokeRect(pp.x, pp.y, pp.w, pp.h);
       c.globalAlpha = 1;
     });
-    const p = this.paddle;
-    c.fillStyle = 'rgba(58,48,35,.2)'; c.fillRect(p.x+2, p.y+3, p.w, p.h);
-    c.fillStyle = '#faf5e6'; c.fillRect(p.x, p.y, p.w, p.h);
-    c.strokeStyle = '#2b2724'; c.lineWidth = 1.6; c.strokeRect(p.x+.5, p.y+.5, p.w-1, p.h-1);
+    // envelopes de poder
+    const PU = { wide:['A','#5f7048'], multi:['M','#b1372b'], slow:['L','#bd8f34'] };
+    for(const pu of this.pus){
+      c.save();
+      c.translate(pu.x, pu.y);
+      c.rotate(Math.sin(pu.t*3)*.15);
+      c.fillStyle = '#e9dfc4'; c.fillRect(-11,-8,22,16);
+      c.strokeStyle = '#2b2724'; c.lineWidth = 1.4;
+      c.strokeRect(-11,-8,22,16);
+      c.beginPath(); c.moveTo(-11,-8); c.lineTo(0,0); c.lineTo(11,-8); c.stroke();
+      c.fillStyle = PU[pu.type][1];
+      c.font = '700 9px "IBM Plex Mono", monospace';
+      c.textAlign = 'center';
+      c.fillText(PU[pu.type][0], 0, 5);
+      c.restore();
+    }
+    // prancheta
+    const p = this.paddle, pw = this.pw;
+    c.fillStyle = 'rgba(58,48,35,.2)'; c.fillRect(p.x+2, p.y+3, pw, p.h);
+    c.fillStyle = '#faf5e6'; c.fillRect(p.x, p.y, pw, p.h);
+    c.strokeStyle = '#2b2724'; c.lineWidth = 1.6; c.strokeRect(p.x+.5, p.y+.5, pw-1, p.h-1);
     c.fillStyle = '#2b2724';
-    for(let i=0;i<3;i++) c.fillRect(p.x+p.w/2-9+i*8, p.y+4, 3, 4);
-    const b = this.ball;
-    c.fillStyle = '#2b2724'; c.beginPath(); c.arc(b.x, b.y, b.r, 0, 7); c.fill();
-    c.fillStyle = 'rgba(250,246,232,.6)'; c.beginPath(); c.arc(b.x-2, b.y-2, 1.7, 0, 7); c.fill();
-    if(b.stuck){
-      c.strokeStyle = 'rgba(177,55,43,.5)'; c.setLineDash([4,5]); c.lineWidth = 1.5;
-      c.beginPath(); c.moveTo(b.x, b.y-10); c.lineTo(b.x, b.y-46); c.stroke();
-      c.setLineDash([]);
+    for(let i=0;i<3;i++) c.fillRect(p.x+pw/2-9+i*8, p.y+4, 3, 4);
+    // bolas
+    for(const b of this.balls){
+      c.fillStyle = '#2b2724'; c.beginPath(); c.arc(b.x, b.y, b.r, 0, 7); c.fill();
+      c.fillStyle = 'rgba(250,246,232,.6)'; c.beginPath(); c.arc(b.x-2, b.y-2, 1.7, 0, 7); c.fill();
+      if(b.stuck){
+        c.strokeStyle = 'rgba(177,55,43,.5)'; c.setLineDash([4,5]); c.lineWidth = 1.5;
+        c.beginPath(); c.moveTo(b.x, b.y-10); c.lineTo(b.x, b.y-46); c.stroke();
+        c.setLineDash([]);
+      }
+    }
+    // textos flutuantes
+    c.font = '700 12px "IBM Plex Mono", monospace';
+    c.textAlign = 'center';
+    for(const fl of this.floaters){
+      c.globalAlpha = Math.max(0, fl.a);
+      c.fillStyle = fl.color;
+      c.fillText(fl.text, fl.x, fl.y);
+      c.globalAlpha = 1;
     }
   }
 }
 
 /* ============================================================
-   JOGO: COMBATE ESPACIAL (caderno azul, a giz)
+   JOGO: ENTREGAS EXPRESSAS (substitui o shooter)
+   Arraste o cesto · pegue cartas, postais e o selo raro ·
+   fuja das tesouras e dos carimbos "DEVOLVIDO".
+   Sequência sem erros multiplica os pontos (×2 ×3 ×4).
    ============================================================ */
-class ShooterGame{
+class DeliveryGame{
   constructor(){
-    this.cv = $('shooter-canvas');
+    this.cv = $('delivery-canvas');
     this.ctx = setupHiDPI(this.cv);
-    this.wrapper = $('shooter-wrapper');
-    this.scoreEl = $('shooter-score');
-    this.livesEl = $('shooter-lives');
-    this.ov = new GameOverlay($('shooter-overlay'));
-    this.stars = Array.from({length:70}, () => ({x:rand(8,392), y:rand(8,392), r:rand(.6,1.7), ph:rand(0,6.28)}));
-    holdButton($('shooter-left'),  v => this.mvL = v);
-    holdButton($('shooter-right'), v => this.mvR = v);
-    holdButton($('shooter-fire'),  v => { this.firing = v; if(v) this.shoot(); });
-    $('shooter-pause').addEventListener('click', () => this.togglePause());
+    this.wrapper = $('delivery-wrapper');
+    this.scoreEl = $('delivery-score');
+    this.livesEl = $('delivery-lives');
+    this.ov = new GameOverlay($('delivery-overlay'));
+    this.goal = 500;
+    this.player = {x:200, tx:200, w:76, tilt:0};
+    this.items = []; this.floaters = []; this.parts = [];
+    holdButton($('delivery-left'),  v => this.mvL = v);
+    holdButton($('delivery-right'), v => this.mvR = v);
+    $('delivery-pause').addEventListener('click', () => this.togglePause());
     this.bindInput();
   }
   enter(){ this.score = 0; this.lives = 3; this.reset(); this.intro(); this.loop(); }
   leave(){ runner.halt(); }
+  difficulty(){ return clamp(this.score/this.goal, 0, 1); }
   reset(){
-    this.player = {x:200, y:356, inv:0};
-    this.bullets = []; this.ebullets = []; this.enemies = []; this.booms = [];
-    this.spawnT = 0; this.fireCd = 0;
-    this.mvL = this.mvR = false; this.firing = false;
-    this.paused = true; this.updateHud();
+    this.player.x = 200; this.player.tx = 200; this.player.tilt = 0;
+    this.items = []; this.floaters = []; this.parts = [];
+    this.spawnT = .4; this.combo = 0; this.mult = 1;
+    this.mvL = this.mvR = false; this.paused = true; this.shake = 0;
+    this.updateHud();
   }
   intro(){
     this.ov.show({
-      title:'Combate espacial', sub:'arraste para mover · fogo para atirar',
+      title:'Entregas expressas', sub:'cartas somam · tesouras cortam · não deixe cair',
       btn:'começar',
       onBtn:()=>{ this.paused=false; },
-      skip:()=>gotoNext('screen-shooter')
+      skip:()=>gotoNext('screen-delivery')
     });
   }
   loop(){
     runner.run((dt,t) => { if(!this.paused) this.update(dt); this.draw(t); });
   }
   spawn(){
-    const r = Math.random(); let e;
-    if(r < .18)      e = {r:10, pts:50, vy:rand(60,80),  amp:rand(26,40), fr:3.2, shape:'gem'};
-    else if(r < .55) e = {r:15, pts:20, vy:rand(34,48),  amp:rand(10,22), fr:1.6, shape:'big'};
-    else             e = {r:9,  pts:30, vy:rand(46,64),  amp:rand(16,30), fr:2.4, shape:'small'};
-    e.bx = rand(34,366); e.x = e.bx; e.y = -16;
-    e.t = 0; e.ph = rand(0,6.28); e.cd = rand(1.2,2.6);
-    this.enemies.push(e);
-  }
-  shoot(){
-    if(this.paused || this.fireCd > 0) return;
-    this.fireCd = .21;
-    this.bullets.push({x:this.player.x, y:this.player.y-16});
-    SFX.blip(880,.06,.035);
+    const d = this.difficulty(), r = Math.random();
+    let kind = 'env';
+    if(r < .10) kind = 'scissors';
+    else if(r < .22) kind = 'returned';
+    else if(r < .30) kind = 'seal';
+    else if(r < .45) kind = 'postcard';
+    const speed = rand(120,150) + 200*d + (kind==='scissors' ? 70 : 0);
+    this.items.push({
+      kind, x: rand(30,370), y: -22, vy: speed, t: 0,
+      swayA: kind==='scissors' ? rand(0,8) : rand(14,34),
+      swayF: rand(1.2,2.4), ph: rand(0,6.28),
+      rot: rand(-.4,.4), vr: rand(-1.2,1.2)
+    });
   }
   update(dt){
-    const p = this.player;
-    p.inv = Math.max(0, p.inv-dt);
-    if(this.mvL || keys.l) p.x -= 330*dt;
-    if(this.mvR || keys.r) p.x += 330*dt;
-    p.x = clamp(p.x, 22, 378);
-    this.fireCd -= dt;
-    if(this.firing && this.fireCd <= 0) this.shoot();
+    const d = this.difficulty(), p = this.player;
+    if(this.mvL || keys.l) p.tx -= 430*dt;
+    if(this.mvR || keys.r) p.tx += 430*dt;
+    p.tx = clamp(p.tx, 50, 350);
+    const prev = p.x;
+    p.x += (p.tx - p.x) * Math.min(1, dt*14);
+    const tiltTarget = clamp((p.x - prev) / (dt || .016) * .0009, -.2, .2);
+    p.tilt += (tiltTarget - p.tilt) * Math.min(1, dt*10);
     this.spawnT -= dt;
-    if(this.spawnT <= 0){ this.spawnT = rand(.9,1.4); this.spawn(); }
-    this.bullets = this.bullets.filter(b => { b.y -= 470*dt; return b.y > -12; });
-    this.ebullets = this.ebullets.filter(b => { b.y += 200*dt; return b.y < 412; });
-    this.enemies.forEach(e => {
-      e.t += dt; e.y += e.vy*dt;
-      e.x = e.bx + Math.sin(e.t*e.fr + e.ph)*e.amp;
-      e.cd -= dt;
-      if(e.cd <= 0 && e.y > 10 && e.y < 300){ e.cd = rand(1.6,3.2); this.ebullets.push({x:e.x, y:e.y+e.r}); }
+    if(this.spawnT <= 0){
+      this.spawnT = rand(.55,.95) - .42*d;
+      this.spawn();
+    }
+    const catchY = 352;
+    this.items = this.items.filter(it => {
+      it.t += dt; it.y += it.vy*dt; it.rot += it.vr*dt;
+      it.dx = Math.sin(it.t*it.swayF + it.ph) * it.swayA;
+      const ix = it.x + it.dx;
+      if(it.y > catchY-12 && it.y < catchY+26 && Math.abs(ix - p.x) < p.w/2 + 12){
+        this.collect(it, ix);
+        return false;
+      }
+      if(it.y > 430){
+        if(it.kind==='env' || it.kind==='postcard' || it.kind==='seal') this.missed(it, ix);
+        return false;
+      }
+      return true;
     });
-    // colisão tiro x inimigo (amostra início, meio e fim do passo: sem atravessar)
-    let done = false;
-    for(const b of this.bullets){
-      const py = b.y + 470*dt;
-      for(const e of this.enemies){
-        if(e.dead) continue;
-        let hit = false;
-        for(const sy of [py, (py+b.y)/2, b.y]){
-          if(Math.hypot(b.x-e.x, sy-e.y) < e.r+4){ hit = true; break; }
-        }
-        if(hit){
-          e.dead = true; b.y = -99;
-          this.score += e.pts;
-          this.booms.push({x:e.x, y:e.y, a:1, r:e.r});
-          SFX.blip(640+rand(0,90),.07,.045);
-          this.updateHud();
-          if(this.score >= 500){ this.finish(); done = true; break; }
-        }
-      }
-      if(done) break;
-    }
-    this.enemies = this.enemies.filter(e => !e.dead && e.y < 415);
-    if(done || this.paused) return;
-    if(p.inv <= 0){
-      for(const b of this.ebullets){
-        if(Math.hypot(b.x-p.x, b.y-p.y) < 15){ b.y = 999; this.hurt(); break; }
-      }
-      if(p.inv <= 0) for(const e of this.enemies){
-        if(Math.hypot(e.x-p.x, e.y-p.y) < e.r+13){ e.dead = true; this.hurt(); break; }
-      }
-      this.enemies = this.enemies.filter(e => !e.dead);
-    }
+    this.floaters = this.floaters.filter(f => { f.y -= 34*dt; f.a -= dt*1.1; return f.a > 0; });
+    this.parts = this.parts.filter(pp => {
+      pp.vy += 520*dt; pp.x += pp.vx*dt; pp.y += pp.vy*dt; pp.a -= dt*2;
+      return pp.a > 0;
+    });
+    this.shake = Math.max(0, this.shake - dt);
   }
-  hurt(){
-    this.lives--; this.player.inv = 1.5; SFX.err(); this.updateHud();
-    if(this.lives <= 0){
-      this.paused = true;
-      this.ov.show({
-        title:'Game over', sub:`${this.score} de 500 pontos`,
-        btn:'tentar de novo',
-        onBtn:()=>{ this.score=0; this.lives=3; this.reset(); this.paused=false; }
-      });
+  collect(it, ix){
+    const p = this.player;
+    if(it.kind === 'scissors'){
+      this.lives--; this.combo = 0; this.mult = 1; this.shake = .5;
+      SFX.err();
+      this.burst(ix, catchYpos(), '#b1372b', 14);
+      this.floaters.push({x:ix, y:328, text:'−1 vida', color:'#b1372b', a:1});
+      this.updateHud();
+      if(this.lives <= 0) this.die();
+      return;
     }
+    if(it.kind === 'returned'){
+      this.score = Math.max(0, this.score - 30);
+      this.combo = 0; this.mult = 1;
+      SFX.err();
+      this.floaters.push({x:ix, y:328, text:'−30 · devolvido ao remetente', color:'#8c2920', a:1});
+      this.updateHud();
+      return;
+    }
+    const base = it.kind === 'seal' ? 40 : it.kind === 'postcard' ? 25 : 10;
+    this.combo++;
+    if(this.combo % 5 === 0 && this.mult < 4){
+      this.mult++;
+      this.floaters.push({x:p.x, y:300, text:'sequência ×'+this.mult, color:'#5f7048', a:1});
+      SFX.blip(1240,.14,.05);
+    }
+    const pts = base * this.mult;
+    this.score += pts;
+    SFX.blip(620 + base*6, .09, .05);
+    this.floaters.push({
+      x:ix, y:332,
+      text:'+'+pts+(this.mult>1 ? ' ×'+this.mult : ''),
+      color: it.kind==='seal' ? '#bd8f34' : '#5f7048', a:1
+    });
+    this.burst(ix, 348, it.kind==='seal' ? '#bd8f34' : '#5f7048', 7);
+    this.updateHud();
+    if(this.score >= this.goal) this.finish();
+  }
+  missed(it, ix){
+    if(this.mult > 1 || this.combo >= 3)
+      this.floaters.push({x:ix, y:390, text:'caiu… sequência perdida', color:'#77695a', a:1});
+    else
+      this.floaters.push({x:ix, y:390, text:'caiu…', color:'#77695a', a:1});
+    this.combo = 0; this.mult = 1;
+    SFX.blip(180,.1,.03);
+  }
+  burst(x, y, color, n){
+    for(let i=0;i<n;i++)
+      this.parts.push({x, y, vx:rand(-90,90), vy:rand(-160,-40), a:1, color, s:rand(2,4)});
+  }
+  die(){
+    this.paused = true;
+    this.ov.show({
+      title:'Game over', sub:'as tesouras venceram esta rodada',
+      btn:'tentar de novo',
+      onBtn:()=>{ this.score=0; this.lives=3; this.reset(); this.paused=false; }
+    });
   }
   finish(){
     this.paused = true; SFX.win();
-    this.ov.show({title:'Prova cumprida', sub:`${this.score} pontos no espaço profundo`, btn:'continuar', onBtn:()=>gotoNext('screen-shooter')});
+    this.ov.show({
+      title:'Prova cumprida', sub:`${this.score} pontos entregues em bom estado`,
+      btn:'continuar', onBtn:()=>gotoNext('screen-delivery')
+    });
   }
   togglePause(){
     if(this.paused) return;
     this.paused = true;
     this.ov.show({
-      title:'Pausado', sub:`${this.score} de 500 pontos`,
+      title:'Pausado', sub:`${this.score} de ${this.goal} pontos`,
       btn:'continuar', onBtn:()=>{ this.paused=false; },
-      skip:()=>gotoNext('screen-shooter')
+      skip:()=>gotoNext('screen-delivery')
     });
   }
   bindInput(){
@@ -1767,92 +2000,157 @@ class ShooterGame{
       if(!down) return;
       if(Math.hypot(e.clientX-down.x, e.clientY-down.y) > 12) down.moved = true;
       const r = this.cv.getBoundingClientRect();
-      this.player.x = clamp((e.clientX-r.left)/r.width*400, 22, 378);
+      this.player.tx = clamp((e.clientX-r.left)/r.width*400, 50, 350);
     });
-    w.addEventListener('pointerup', () => {
-      if(down && !down.moved && performance.now()-down.t < 300) this.shoot();
-      down = null;
-    });
-    w.addEventListener('pointercancel', () => down = null);
+    w.addEventListener('pointerup', () => { down = null; });
+    w.addEventListener('pointercancel', () => { down = null; });
   }
   updateHud(){
-    this.scoreEl.textContent = `Pontos ${this.score} / 500`;
+    this.scoreEl.textContent = `Pontos ${this.score} / ${this.goal}`;
     renderLives(this.livesEl, this.lives);
   }
   draw(t){
-    const c = this.ctx;
+    const c = this.ctx, p = this.player;
     c.clearRect(0,0,400,400);
-    c.fillStyle = '#2c3a46'; c.fillRect(0,0,400,400);
-    this.stars.forEach(s => {
-      const a = .25 + .45*(.5+.5*Math.sin(t/700+s.ph));
-      c.fillStyle = `rgba(250,246,232,${a})`;
-      c.beginPath(); c.arc(s.x, s.y, s.r, 0, 7); c.fill();
-    });
-    this.booms = this.booms.filter(b => b.a > 0);
-    this.booms.forEach(b => {
-      b.a -= .05; b.r += 1.4;
-      c.strokeStyle = `rgba(250,246,232,${Math.max(0,b.a)})`;
-      c.lineWidth = 2;
-      c.beginPath(); c.arc(b.x, b.y, b.r, 0, 7); c.stroke();
-    });
-    this.enemies.forEach(e => {
-      c.lineWidth = 2; c.strokeStyle = '#faf6e8'; c.fillStyle = '#1f2b34';
-      if(e.shape === 'gem'){
-        c.save(); c.translate(e.x, e.y); c.rotate(e.t);
-        c.beginPath();
-        c.moveTo(0,-e.r); c.lineTo(e.r,0); c.lineTo(0,e.r); c.lineTo(-e.r,0);
-        c.closePath(); c.fill(); c.stroke();
-        c.restore();
-      } else {
-        c.beginPath(); c.arc(e.x, e.y, e.r, 0, 7); c.fill(); c.stroke();
-        if(e.shape === 'big'){
-          c.beginPath();
-          c.moveTo(e.x-6, e.y-4); c.lineTo(e.x-2, e.y-2);
-          c.moveTo(e.x+6, e.y-4); c.lineTo(e.x+2, e.y-2);
-          c.stroke();
-        }
-      }
-      c.fillStyle = '#faf6e8';
-      c.beginPath(); c.arc(e.x-3.4, e.y+1, 1.6, 0, 7); c.fill();
-      c.beginPath(); c.arc(e.x+3.4, e.y+1, 1.6, 0, 7); c.fill();
-    });
-    c.fillStyle = '#faf6e8';
-    this.bullets.forEach(b => c.fillRect(b.x-1.5, b.y-8, 3, 10));
-    c.fillStyle = '#b1372b';
-    this.ebullets.forEach(b => { c.beginPath(); c.arc(b.x, b.y, 3.4, 0, 7); c.fill(); });
-    const p = this.player;
-    if(p.inv <= 0 || Math.floor(t/90)%2 === 0){
-      c.save(); c.translate(p.x, p.y);
-      c.fillStyle = '#1f2b34'; c.strokeStyle = '#faf6e8'; c.lineWidth = 2;
-      c.beginPath();
-      c.moveTo(0,-16); c.lineTo(11,6); c.lineTo(4,3); c.lineTo(-4,3); c.lineTo(-11,6);
-      c.closePath(); c.fill(); c.stroke();
-      c.fillStyle = '#faf6e8';
-      c.beginPath(); c.arc(0,-4,2.6,0,7); c.fill();
-      const fl = 5+Math.sin(t/60)*3;
-      c.fillStyle = 'rgba(177,55,43,.85)';
-      c.beginPath(); c.moveTo(-4,4); c.lineTo(0,4+fl); c.lineTo(4,4); c.closePath(); c.fill();
-      c.restore();
+    c.save();
+    if(this.shake > 0) c.translate(rand(-1,1)*7*this.shake, rand(-1,1)*7*this.shake);
+    // papel de fundo com pauta
+    c.fillStyle = '#f6efdc'; c.fillRect(0,0,400,400);
+    c.strokeStyle = 'rgba(43,39,36,.05)'; c.lineWidth = 1; c.beginPath();
+    for(let y=40; y<400; y+=40){ c.moveTo(0,y+.5); c.lineTo(400,y+.5); }
+    c.stroke();
+    // esteira do fundo
+    c.strokeStyle = 'rgba(43,39,36,.35)'; c.lineWidth = 2;
+    c.beginPath(); c.moveTo(10,392.5); c.lineTo(390,392.5); c.stroke();
+    c.strokeStyle = 'rgba(43,39,36,.2)'; c.lineWidth = 1;
+    c.setLineDash([5,7]);
+    c.beginPath(); c.moveTo(10,398.5); c.lineTo(390,398.5); c.stroke();
+    c.setLineDash([]);
+    // itens
+    for(const it of this.items) this.drawItem(c, it, t);
+    // partículas
+    for(const pp of this.parts){
+      c.globalAlpha = Math.max(0, pp.a);
+      c.fillStyle = pp.color;
+      c.fillRect(pp.x-pp.s/2, pp.y-pp.s/2, pp.s, pp.s);
+      c.globalAlpha = 1;
     }
+    // cesto
+    c.save();
+    c.translate(p.x, 352);
+    c.rotate(p.tilt);
+    const r = p.w/2;
+    // envelope espiando dentro do cesto
+    c.fillStyle = '#fbf6e7';
+    c.fillRect(-13, -14, 26, 12);
+    c.strokeStyle = '#2b2724'; c.lineWidth = 1.3;
+    c.strokeRect(-13, -14, 26, 12);
+    c.beginPath(); c.moveTo(-13,-14); c.lineTo(0,-6); c.lineTo(13,-14); c.stroke();
+    c.fillStyle = '#b1372b';
+    c.beginPath(); c.arc(8, -9, 2.2, 0, 7); c.fill();
+    // corpo do cesto
+    c.beginPath(); c.arc(0, 0, r, 0, Math.PI); c.closePath();
+    c.fillStyle = '#e9dfc4'; c.fill();
+    c.strokeStyle = '#2b2724'; c.lineWidth = 2.5; c.stroke();
+    // vime
+    c.strokeStyle = 'rgba(43,39,36,.3)'; c.lineWidth = 1.2;
+    c.beginPath(); c.arc(0, 0, r*.62, 0, Math.PI); c.stroke();
+    c.beginPath(); c.arc(0, 0, r*.3, 0, Math.PI); c.stroke();
+    // boca
+    c.strokeStyle = '#2b2724'; c.lineWidth = 2.5;
+    c.beginPath(); c.moveTo(-r, 0); c.lineTo(r, 0); c.stroke();
+    c.restore();
+    // selo de sequência
+    if(this.mult > 1){
+      c.fillStyle = '#5f7048';
+      c.font = '700 10px "IBM Plex Mono", monospace';
+      c.textAlign = 'right';
+      c.fillText('sequência ×'+this.mult, 386, 22);
+    }
+    // textos flutuantes
+    c.font = '700 12px "IBM Plex Mono", monospace';
+    c.textAlign = 'center';
+    for(const f of this.floaters){
+      c.globalAlpha = Math.max(0, f.a);
+      c.fillStyle = f.color;
+      c.fillText(f.text, clamp(f.x, 60, 340), f.y);
+      c.globalAlpha = 1;
+    }
+    c.restore();
+  }
+  drawItem(c, it, t){
+    c.save();
+    c.translate(it.x + (it.dx||0), it.y);
+    c.rotate(it.kind === 'returned' ? it.rot*.5 : it.rot*.7);
+    if(it.kind === 'env'){
+      c.fillStyle = '#fbf6e7'; c.fillRect(-13,-9,26,18);
+      c.strokeStyle = '#2b2724'; c.lineWidth = 1.5;
+      c.strokeRect(-13,-9,26,18);
+      c.beginPath(); c.moveTo(-13,-9); c.lineTo(0,1); c.lineTo(13,-9); c.stroke();
+      c.fillStyle = '#b1372b';
+      c.beginPath(); c.arc(-7, 5, 2.2, 0, 7); c.fill();
+    } else if(it.kind === 'postcard'){
+      c.fillStyle = '#3d5160'; c.fillRect(-14,-10,28,20);
+      c.strokeStyle = 'rgba(250,246,232,.7)'; c.lineWidth = 1.2;
+      c.strokeRect(-14,-10,28,20);
+      c.strokeStyle = 'rgba(250,246,232,.45)';
+      c.beginPath(); c.moveTo(-9,-2); c.lineTo(6,-2); c.moveTo(-9,3); c.lineTo(2,3); c.stroke();
+      c.fillStyle = '#bd8f34'; c.fillRect(6,-8,6,7);
+    } else if(it.kind === 'seal'){
+      c.rotate(t*.002);
+      c.fillStyle = '#bd8f34'; c.fillRect(-11,-11,22,22);
+      c.strokeStyle = '#8a6a20'; c.lineWidth = 1.5;
+      c.setLineDash([2,2]);
+      c.strokeRect(-13,-13,26,26);
+      c.setLineDash([]);
+      c.fillStyle = '#f2e9d4';
+      c.beginPath(); c.arc(0,0,7.5,0,7); c.fill();
+      c.fillStyle = '#8a6a20';
+      c.font = 'italic 700 10px Georgia, serif';
+      c.textAlign = 'center';
+      c.fillText('K', 0, 3.5);
+    } else if(it.kind === 'returned'){
+      c.fillStyle = 'rgba(177,55,43,.92)'; c.fillRect(-17,-10,34,20);
+      c.strokeStyle = '#8c2920'; c.lineWidth = 1.5;
+      c.strokeRect(-17,-10,34,20);
+      c.fillStyle = '#f7ead6';
+      c.font = '700 7px "IBM Plex Mono", monospace';
+      c.textAlign = 'center';
+      c.fillText('DEVOLVIDO', 0, 2.5);
+    } else if(it.kind === 'scissors'){
+      c.lineCap = 'round';
+      c.strokeStyle = '#3f4850'; c.lineWidth = 5;
+      c.beginPath();
+      c.moveTo(-2,0); c.lineTo(18,-7);
+      c.moveTo(-2,0); c.lineTo(18,7);
+      c.stroke();
+      c.fillStyle = '#2b2724';
+      c.beginPath(); c.arc(-1,0,2.6,0,7); c.fill();
+      c.strokeStyle = '#2b2724'; c.lineWidth = 3.5;
+      c.beginPath(); c.arc(-11,-7,6,0,7); c.stroke();
+      c.beginPath(); c.arc(-11,7,6,0,7); c.stroke();
+    }
+    c.restore();
   }
 }
+function catchYpos(){ return 352; }
 
 const snake = new SnakeGame();
 const bricks = new BricksGame();
-const shooter = new ShooterGame();
+const delivery = new DeliveryGame();
 
+/* teclado (bônus para desktop) */
 window.addEventListener('keydown', e => {
   const s = document.body.dataset.screen;
   if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A') keys.l = true;
   if(e.key==='ArrowRight'||e.key==='d'||e.key==='D') keys.r = true;
   if(s === 'snake'){ snake.key(e); if(e.key==='Escape'||e.key==='p'||e.key==='P') snake.togglePause(); }
   else if(s === 'bricks'){
-    if(e.key===' ') bricks.launch();
+    if(e.key===' ') { e.preventDefault(); bricks.launch(); }
     if(e.key==='Escape'||e.key==='p'||e.key==='P') bricks.togglePause();
   }
-  else if(s === 'shooter'){
-    if(e.key===' ') shooter.shoot();
-    if(e.key==='Escape'||e.key==='p'||e.key==='P') shooter.togglePause();
+  else if(s === 'delivery'){
+    if(e.key==='Escape'||e.key==='p'||e.key==='P') delivery.togglePause();
   }
 });
 window.addEventListener('keyup', e => {
@@ -1862,19 +2160,21 @@ window.addEventListener('keyup', e => {
 document.addEventListener('visibilitychange', () => {
   if(document.hidden){
     const s = document.body.dataset.screen;
-    const g = s==='snake'?snake : s==='bricks'?bricks : s==='shooter'?shooter : null;
+    const g = s==='snake'?snake : s==='bricks'?bricks : s==='delivery'?delivery : null;
     if(g && !g.paused) g.togglePause();
   }
 });
 
 /* ============================================================
-   NÃO ME APERTE — contagem regressiva de 10s, igual ao original
+   NÃO ME APERTE — cada apertada soma +10s, treme, e acumula
+   um carimbo de advertência (I, II, III…). Punitivo de verdade.
    ============================================================ */
-let dpTimer = null, dpTime = 10, dpMsgIdx = 0;
+let dpTimer = null, dpTime = 10, dpPresses = 0;
 function startDontPress(){
   stopDontPress();
-  dpTime = 10; dpMsgIdx = 0;
+  dpTime = 10; dpPresses = 0;
   $('dp-msg').textContent = '';
+  $('dp-advice').classList.add('hidden');
   renderDp();
   dpTimer = setInterval(() => {
     dpTime--;
@@ -1895,16 +2195,30 @@ function renderDp(){
 }
  $('btn-dontpress').addEventListener('click', () => {
   SFX.err();
-  const b = $('btn-dontpress');
-  b.classList.remove('pressed'); void b.offsetWidth; b.classList.add('pressed');
-  $('dp-msg').textContent = CONFIG.DONT_PRESS[dpMsgIdx % CONFIG.DONT_PRESS.length];
-  dpMsgIdx++;
-  dpTime = 10;
+  dpPresses++;
+  dpTime = Math.min(dpTime + 10, 99);
+  // bolha "+10s"
+  const plus = document.createElement('span');
+  plus.className = 'dp-plus';
+  plus.textContent = '+10 s';
+  $('dp-timer').parentNode.appendChild(plus);
+  setTimeout(() => plus.remove(), 1000);
+  // tremor do cartão
+  const card = $('dp-card');
+  card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+  // carimbo de advertência acumulativo
+  const advice = $('dp-advice');
+  advice.classList.remove('hidden');
+  advice.textContent = 'advertência ' + toRoman(dpPresses);
+  // confete de "punição" + mensagem
+  const r = $('btn-dontpress').getBoundingClientRect();
+  confetti(r.left + r.width/2, r.top, 8, ['#b1372b','#8c2920','#b1372b']);
+  $('dp-msg').textContent = CONFIG.DONT_PRESS[Math.min(dpPresses-1, CONFIG.DONT_PRESS.length-1)];
   renderDp();
 });
 
 /* ============================================================
-   A CARTA — digitação palavra a palavra, toque pula/avança
+   A CARTA — texto centralizado, digitação palavra a palavra
    ============================================================ */
 let dlIdx = 0, dlDone = false, dlTimer = null, dlTick = null;
 function startDialogue(){
@@ -1976,8 +2290,7 @@ function finishLine(){
 });
 
 /* ============================================================
-   ENVELOPE + SEGREDO (5 toques no lacre, reset de 2500ms —
-   mesmos parâmetros do seu original)
+   ENVELOPE + SEGREDO (5 toques no lacre, reset de 2500ms)
    ============================================================ */
 const env = $('env');
 function resetEnvelope(){
@@ -2026,7 +2339,6 @@ env.addEventListener('keydown', e => {
   setTimeout(() => transitionTo('screen-home','screen-captcha'), 1500);
 });
 
-/* segredo: intro → lista */
  $('screen-secret-intro').addEventListener('click', () => {
   SFX.blip();
   transitionTo('screen-secret-intro','screen-secret-list');

@@ -465,7 +465,7 @@ body[data-screen="secret-list"] .tracker{opacity:0}
 <!-- ===== TELA: FONES ===== -->
 <section id="screen-audio" class="screen active">
   <div class="card">
-    <span class="label">Lado A · 33⅓ RPM</span>
+    <span class="label">Happy birthday</span>
     <svg class="phones" viewBox="0 0 64 64" fill="none" aria-hidden="true">
       <path d="M14 40v-8a18 18 0 0 1 36 0v8" stroke="#2b2724" stroke-width="3" stroke-linecap="round"/>
       <rect x="9" y="38" width="12" height="16" rx="4" fill="#2b2724"/>
@@ -794,16 +794,59 @@ class AudioManager {
     }catch(e){}
   }
   play(type){
-    if(this.type===type && this.playing) return;
-    this.stop(); this.type=type;
-    const src=CONFIG.AUDIO_FILES[type];
-    if(!src){ this.fallback(type); return; }
+    if(this.type === type && this.playing) return;
+
+    // Cancela qualquer tentativa anterior de reprodução
+    const requestId = (this._requestId || 0) + 1;
+    this._requestId = requestId;
+
+    this.stop();
+    this.type = type;
+
+    const src = CONFIG.AUDIO_FILES[type];
+
+    if(!src){
+      this.fallback(type);
+      return;
+    }
+
     this.init();
-    const a=new Audio();
-    a.src=src; a.loop=true; a.volume=this.volume; a.preload='auto';
-    a.addEventListener('error',()=>{ if(this.type===type) this.fallback(type); });
-    a.play().then(()=>{ this.el=a; this.playing=true; })
-            .catch(()=>{ if(this.type===type) this.fallback(type); });
+
+    const a = new Audio();
+    a.src = src;
+    a.loop = true;
+    a.volume = this.volume;
+    a.preload = 'auto';
+
+    // Guarda o elemento ANTES do play() assíncrono
+    this.el = a;
+
+    a.addEventListener('error', () => {
+      if(this.type === type && this._requestId === requestId){
+        this.el = null;
+        this.fallback(type);
+      }
+    });
+
+    a.play()
+      .then(() => {
+        // Se outra reprodução começou enquanto esta carregava,
+        // esta não pode assumir o controle novamente.
+        if(this._requestId !== requestId || this.type !== type){
+          a.pause();
+          a.currentTime = 0;
+          return;
+        }
+
+        this.el = a;
+        this.playing = true;
+      })
+      .catch(() => {
+        if(this._requestId === requestId && this.type === type){
+          this.el = null;
+          this.fallback(type);
+        }
+      });
   }
   fallback(type){
     if(this._fb===type && this.playing) return;
@@ -829,7 +872,19 @@ class AudioManager {
     },P.gap);
   }
   stopTimer(){ if(this.timer){ clearInterval(this.timer); this.timer=null; } }
-  stop(){ this.playing=false; this.type=null; this.stopTimer(); if(this.el){ this.el.pause(); this.el=null; } }
+  stop(){
+    this._requestId = (this._requestId || 0) + 1;
+
+    this.playing = false;
+    this.type = null;
+    this.stopTimer();
+
+    if(this.el){
+      this.el.pause();
+      this.el.currentTime = 0;
+      this.el = null;
+    }
+  }
 }
 const audio = new AudioManager();
 let audioStarted = false;

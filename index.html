@@ -796,11 +796,9 @@ class AudioManager {
   play(type){
     if(this.type === type && this.playing) return;
 
-    // Cancela qualquer tentativa anterior de reprodução
-    const requestId = (this._requestId || 0) + 1;
-    this._requestId = requestId;
-
+    // Cancela qualquer reprodução anterior
     this.stop();
+
     this.type = type;
 
     const src = CONFIG.AUDIO_FILES[type];
@@ -818,11 +816,12 @@ class AudioManager {
     a.volume = this.volume;
     a.preload = 'auto';
 
-    // Guarda o elemento ANTES do play() assíncrono
+    // IMPORTANTE: guardar o elemento imediatamente
+    // para que um segundo play() consiga pará-lo.
     this.el = a;
 
     a.addEventListener('error', () => {
-      if(this.type === type && this._requestId === requestId){
+      if(this.el === a && this.type === type){
         this.el = null;
         this.fallback(type);
       }
@@ -830,19 +829,17 @@ class AudioManager {
 
     a.play()
       .then(() => {
-        // Se outra reprodução começou enquanto esta carregava,
-        // esta não pode assumir o controle novamente.
-        if(this._requestId !== requestId || this.type !== type){
+        // Só considera tocando se este ainda for o áudio atual
+        if(this.el !== a || this.type !== type){
           a.pause();
           a.currentTime = 0;
           return;
         }
 
-        this.el = a;
         this.playing = true;
       })
       .catch(() => {
-        if(this._requestId === requestId && this.type === type){
+        if(this.el === a && this.type === type){
           this.el = null;
           this.fallback(type);
         }
@@ -873,8 +870,6 @@ class AudioManager {
   }
   stopTimer(){ if(this.timer){ clearInterval(this.timer); this.timer=null; } }
   stop(){
-    this._requestId = (this._requestId || 0) + 1;
-
     this.playing = false;
     this.type = null;
     this.stopTimer();

@@ -637,7 +637,7 @@ body[data-screen="secret-list"] .tracker{opacity:0}
         </div>
       </div>
     </div>
-    <p class="gesture-tip">deslize rápido em qualquer ponto da tela · abra tudo, menos a bomba</p>
+    <p class="gesture-tip">deslize rápido para "abrir" as cartas</p>
   </div>
 </section>
 
@@ -2085,7 +2085,7 @@ class DeliveryGame{
   finish(){
     this.paused = true; SFX.win();
     this.ov.show({
-      title:'Prova cumprida', sub:`${this.score} pontos · tudo aberto com estilo`,
+      title:'Prova cumprida', sub:`${this.score} pontos · cartas foram rasgadas por aqui...`,
       btn:'continuar', onBtn:()=>gotoNext('screen-delivery')
     });
   }

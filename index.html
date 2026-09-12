@@ -34,7 +34,7 @@
   --night:#2c3a46;
   --cream:#faf6e8;
   --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.14 0.14 0.14 0 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-  --noise-strong:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.42 0.42 0.42 0 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  --noise-strong:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.42 0.42 0.42 0 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
   --shadow-hard:4px 5px 0 rgba(58,48,35,.16);
   --shadow-soft:0 24px 48px -18px rgba(58,48,35,.35);
   --ease:cubic-bezier(.22,1,.36,1);
@@ -452,6 +452,10 @@ body[data-screen="secret-list"] .tracker{opacity:0}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
+
+/* ===== NOVO: gesto "tela inteira" sem rolar o cartão
+   (quebra-tijolos + rasga-rasga) ===== */
+#screen-bricks, #screen-delivery{ touch-action:none }
 </style>
 </head>
 <body data-screen="audio">
@@ -469,7 +473,7 @@ body[data-screen="secret-list"] .tracker{opacity:0}
     </svg>
     <h2>Coloque seus <em>fones</em><br>de ouvido</h2>
     <p class="lead">Vai por mim — a música nem tá tão ruim.</p>
-    <button class="btn" id="btn-audio-start">Já cologuei os fones</button>
+    <button class="btn" id="btn-audio-start">Já coloquei os fones</button>
     <svg class="staff" viewBox="0 0 240 60" aria-hidden="true">
       <g stroke="rgba(43,39,36,.3)" stroke-width="1">
         <line x1="6" y1="12" x2="234" y2="12"/><line x1="6" y1="21" x2="234" y2="21"/>
@@ -578,12 +582,12 @@ body[data-screen="secret-list"] .tracker{opacity:0}
   </div>
 </section>
 
-<!-- ===== QUEBRA-TIJOLOS ===== -->
+<!-- ===== QUEBRA-TIJOLOS (agora nível único · tela toda é touch) ===== -->
 <section id="screen-bricks" class="screen">
   <div class="card card--game card--ctrl">
     <div class="game-head">
       <span class="lives" id="bricks-lives"></span>
-      <span class="g-goal" id="bricks-goal">Nível 1 de 3</span>
+      <span class="g-goal" id="bricks-goal">nível único</span>
       <button class="icon-btn" id="bricks-pause" aria-label="Pausar">
         <svg viewBox="0 0 16 16" fill="none"><path d="M5.2 3.2v9.6M10.8 3.2v9.6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
       </button>
@@ -608,13 +612,13 @@ body[data-screen="secret-list"] .tracker{opacity:0}
         <svg viewBox="0 0 18 18" fill="none"><path d="M6.5 3.5 12 9l-5.5 5.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
-    <p class="gesture-tip">arraste a prancheta · envelopes que caem dão poderes</p>
+    <p class="gesture-tip">arraste em qualquer ponto da tela · envelopes que caem dão poderes</p>
   </div>
 </section>
 
-<!-- ===== ENTREGAS EXPRESSAS ===== -->
+<!-- ===== RASGA-RASGA (novo jogo — no lugar das entregas de cesto) ===== -->
 <section id="screen-delivery" class="screen">
-  <div class="card card--game card--ctrl">
+  <div class="card card--game">
     <div class="game-head">
       <span class="g-score" id="delivery-score">Pontos 0 / 500</span>
       <span class="lives" id="delivery-lives"></span>
@@ -633,15 +637,7 @@ body[data-screen="secret-list"] .tracker{opacity:0}
         </div>
       </div>
     </div>
-    <div class="controls">
-      <button class="ctrl" id="delivery-left" aria-label="Mover para a esquerda">
-        <svg viewBox="0 0 18 18" fill="none"><path d="M11.5 3.5 6 9l5.5 5.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-      <button class="ctrl" id="delivery-right" aria-label="Mover para a direita">
-        <svg viewBox="0 0 18 18" fill="none"><path d="M6.5 3.5 12 9l-5.5 5.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-    </div>
-    <p class="gesture-tip">arraste o cesto · cartas somam, tesouras cortam</p>
+    <p class="gesture-tip">deslize rápido em qualquer ponto da tela · abra tudo, menos a bomba</p>
   </div>
 </section>
 
@@ -689,17 +685,31 @@ body[data-screen="secret-list"] .tracker{opacity:0}
   <div class="paper-long" id="secret-list-container">
     <header>
       <span class="label label--wax">Documento restrito</span>
-      <h1>101 coisas que eu provavelmente nunca te contei</h1>
-      <p class="secret-intro-text">Ainda em desenvolvimento</p>
+      <h1>Coisas que eu nunca te contei</h1>
+      <p class="secret-intro-text">Provavelmente</p>
     </header>
     <ol class="secret-list" id="secret-list">
-      <li>Essa prog é pro niver da K</li>
-      <li>Você é a primeria pessoa pra quem eu mostro isso</li>
-      <li>Espero que vc tenha gostado da esperiência</li>
-      <li>Não, eu não vou colocar aqui as 101 coisas pra vc ler, se quiser saber manda mensagem no pv</li>
+      <li>Você, por algum motivo, me lembra um pão de queijo. Não me pergunte o por quê</li>
+      <li>Seu gosto por animais é uma das coisas mais legais em você</li>
+      <li>Na primeira vez que eu falei contigo, o meu objetivo era descobrir como se fazia um coque de cabelo (ainda não descobri como se faz)</li>
+      <li></li>
+      <li>Desculpa aí, mas meus pensamentos intusivos querem muito q eu te jogue em uma cesta de basquete...</li>
+      <li></li>
+      <li>As pinturas q vc faz são de dar inveja</li>
+      <li>O rato comeu a roupa do rei de Roma (eu tenho quase certeza q eu nunca te falei isso)</li>
+      <li>Eu tenho certeza que aquele UNO era o maior esquema de apostas da escola</li>
+      <li>Eu acho q vc tem mais animais que um fazendeiro</li>
+      <li></li>
+      <li>Toda vez q vc aparece em algum dos meus sonhos vc tá com uma personalidade diferente</li>
+      <li>Acho a sua relação com a sua mãe uma coisa tão fofinha</li>
+      <li></li>
+      <li>Obrigado por já ter perdido alguns minutos da tua vida tentando entender minhas perguntas sem sentido</li>
+      <li>Obrigado por ser minha amiga</li>
+      <li>Obrigado por fazer parte de um monte de memórias boas</li>
+      <li>Obrigado por ser quem vc é</li>
     </ol>
     <footer class="secret-footer">
-      <p>Se você parar parar pra pensar bem, talvez note que gostar de alguém, romanticamente ou não, simplesmente é algo q vc decide, não tem nada a ver com a outra pessoa, tipo "se eu gosto ou não de você, oq isso tem a ver contigo? fui EU quem escolheu"</p>
+      <p></p>
       <span class="stamp-end">Fim</span>
     </footer>
   </div>
@@ -1314,7 +1324,7 @@ class GameOverlay{
 const keys = {l:false, r:false};
 
 /* ============================================================
-   JOGO: COBRINHA (inalterado nesta rodada)
+   JOGO: COBRINHA (inalterado)
    ============================================================ */
 class SnakeGame{
   constructor(){
@@ -1387,7 +1397,7 @@ class SnakeGame{
   finish(){
     this.paused = true; SFX.win();
     this.ov.show({
-      title:'Prova cumprida', sub:`${this.score} pontos. A cobra tá orgulhosa.`,
+      title:'Prova cumprida', sub:`${this.score} pontos. Finalmente vc saiu do tutorial.`,
       btn:'continuar', onBtn:()=>gotoNext('screen-snake')
     });
   }
@@ -1473,8 +1483,10 @@ class SnakeGame{
 }
 
 /* ============================================================
-   JOGO: QUEBRA-TIJOLOS — 3 níveis com formas diferentes,
+   JOGO: QUEBRA-TIJOLOS — agora NÍVEL ÚNICO (só "a abertura"),
    tijolos que racham (2 batidas) e envelopes de poder.
+   A TELA INTEIRA funciona como touch: arraste em qualquer
+   ponto para mover a prancheta, toque rápido para lançar.
    '.' vazio · '1' uma batida · '2' duas batidas
    ============================================================ */
 const BRICK_LEVELS = [
@@ -1483,24 +1495,6 @@ const BRICK_LEVELS = [
     '11111111111',
     '22222222222',
     '11111111111'
-  ]},
-  { name:'o coração', speed:330, sway:0, map:[
-    '.11.....11.',
-    '1111...1111',
-    '11111111111',
-    '11111111111',
-    '.111111111.',
-    '..1111111..',
-    '...11111...',
-    '....222....'
-  ]},
-  { name:'a maré alta', speed:355, sway:14, map:[
-    '1.1.1.1.1.1',
-    '2.2.2.2.2.2',
-    '1.1.1.1.1.1',
-    '22222222222',
-    '1.1.1.1.1.1',
-    '2.2.2.2.2.2'
   ]}
 ];
 
@@ -1559,7 +1553,7 @@ class BricksGame{
   }
   intro(){
     this.ov.show({
-      title:'Quebra-tijolos', sub:'arraste para mover · pegue os envelopes que caem',
+      title:'Quebra-tijolos', sub:'arraste em qualquer ponto da tela · pegue os envelopes que caem',
       btn:'começar',
       onBtn:()=>{ this.paused=false; },
       skip:()=>gotoNext('screen-bricks')
@@ -1679,20 +1673,11 @@ class BricksGame{
   }
   levelUp(){
     if(this.paused) return;
-    this.paused = true; this.level++;
-    if(this.level >= BRICK_LEVELS.length){
-      SFX.win();
-      this.ov.show({
-        title:'Prova cumprida', sub:`${this.score} pontos · três tabelas no chão`,
-        btn:'continuar', onBtn:()=>gotoNext('screen-bricks')
-      });
-    } else {
-      SFX.win();
-      this.ov.show({
-        title:'Tabela limpa', sub:`próxima: ${BRICK_LEVELS[this.level].name}`,
-        btn:'continuar', onBtn:()=>{ this.reset(); this.paused=false; }
-      });
-    }
+    this.paused = true; SFX.win();
+    this.ov.show({
+      title:'Prova cumprida', sub:`${this.score} pontos · a tabela foi limpa`,
+      btn:'continuar', onBtn:()=>gotoNext('screen-bricks')
+    });
   }
   loseLife(){
     this.lives--; this.updateHud(); SFX.err();
@@ -1711,33 +1696,38 @@ class BricksGame{
     if(this.paused) return;
     this.paused = true;
     this.ov.show({
-      title:'Pausado', sub:`nível ${this.level+1} de ${BRICK_LEVELS.length}`,
+      title:'Pausado', sub:`${this.score} pontos · nível único`,
       btn:'continuar', onBtn:()=>{ this.paused=false; },
       skip:()=>gotoNext('screen-bricks')
     });
   }
   bindInput(){
-    const w = this.wrapper; let down = null;
-    w.addEventListener('pointerdown', e => {
+    // TELA INTEIRA como touch: arrastar em qualquer ponto move a
+    // prancheta; toque rápido em qualquer ponto lança a bola.
+    // Os botões (pausa, ← lançar →) continuam funcionando normal.
+    const active = () => document.body.dataset.screen === 'bricks';
+    const onUi = e => e.target.closest && e.target.closest('button');
+    let down = null;
+    window.addEventListener('pointerdown', e => {
+      if(!active() || onUi(e)) return;
       down = {x:e.clientX, y:e.clientY, t:performance.now(), moved:false};
-      try{ w.setPointerCapture(e.pointerId); }catch(err){}
     });
-    w.addEventListener('pointermove', e => {
-      if(!down) return;
+    window.addEventListener('pointermove', e => {
+      if(!active() || !down) return;
       if(Math.hypot(e.clientX-down.x, e.clientY-down.y) > 12) down.moved = true;
       const r = this.cv.getBoundingClientRect();
       const px = (e.clientX-r.left)/r.width*400;
       this.paddle.x = clamp(px-this.pw/2, 6, 400-6-this.pw);
     });
-    w.addEventListener('pointerup', () => {
+    window.addEventListener('pointerup', () => {
       if(down && !down.moved && performance.now()-down.t < 300) this.launch();
       down = null;
     });
-    w.addEventListener('pointercancel', () => down = null);
+    window.addEventListener('pointercancel', () => down = null);
   }
   updateHud(){
     renderLives(this.livesEl, this.lives);
-    this.goalEl.textContent = `Nível ${this.level+1} de ${BRICK_LEVELS.length}`;
+    this.goalEl.textContent = 'nível único';
   }
   draw(t){
     const c = this.ctx;
@@ -1823,11 +1813,42 @@ class BricksGame{
 }
 
 /* ============================================================
-   JOGO: ENTREGAS EXPRESSAS (substitui o shooter)
-   Arraste o cesto · pegue cartas, postais e o selo raro ·
-   fuja das tesouras e dos carimbos "DEVOLVIDO".
-   Sequência sem erros multiplica os pontos (×2 ×3 ×4).
+   JOGO: RASGA-RASGA (substitui as entregas de cesto)
+   Deslize rápido o dedo ou o mouse — a TELA INTEIRA é a lâmina.
+   Abra envelopes (10), postais (25) e selos raros (40).
+   Carta boa no chão custa vida · carta-bomba encerra a rodada.
+   3+ aberturas seguidas fecham série com bônus.
    ============================================================ */
+
+/* som de papel rasgado (usa a infra de áudio que já existia) */
+SFX.tear = function(){
+  const c = this._c(); if(!c) return;
+  try{
+    const t = c.currentTime, n = this._noise();
+    if(n){
+      const s = c.createBufferSource(); s.buffer = n;
+      const f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 2400; f.Q.value = .7;
+      const g = c.createGain();
+      g.gain.setValueAtTime(.11, t); g.gain.exponentialRampToValueAtTime(.0001, t+.11);
+      s.connect(f); f.connect(g); g.connect(c.destination); s.start(t); s.stop(t+.12);
+    }
+    const o = c.createOscillator(), g2 = c.createGain();
+    o.type = 'triangle';
+    o.frequency.setValueAtTime(560, t); o.frequency.exponentialRampToValueAtTime(240, t+.1);
+    g2.gain.setValueAtTime(.05, t); g2.gain.exponentialRampToValueAtTime(.0001, t+.11);
+    o.connect(g2); g2.connect(c.destination); o.start(t); o.stop(t+.12);
+  }catch(e){}
+};
+
+/* o gesto do dedo vira lâmina: distância ponto-segmento */
+function slashHits(a, b, cx, cy, r){
+  const dx = b.x-a.x, dy = b.y-a.y, l2 = dx*dx+dy*dy;
+  let t = l2 ? ((cx-a.x)*dx+(cy-a.y)*dy)/l2 : 0;
+  t = clamp(t, 0, 1);
+  const px = a.x+dx*t-cx, py = a.y+dy*t-cy;
+  return px*px+py*py <= r*r;
+}
+
 class DeliveryGame{
   constructor(){
     this.cv = $('delivery-canvas');
@@ -1837,10 +1858,9 @@ class DeliveryGame{
     this.livesEl = $('delivery-lives');
     this.ov = new GameOverlay($('delivery-overlay'));
     this.goal = 500;
-    this.player = {x:200, tx:200, w:76, tilt:0};
-    this.items = []; this.floaters = []; this.parts = [];
-    holdButton($('delivery-left'),  v => this.mvL = v);
-    holdButton($('delivery-right'), v => this.mvR = v);
+    this.grav = 700;
+    this.items = []; this.halves = []; this.parts = []; this.floaters = [];
+    this.trail = []; this._last = null;
     $('delivery-pause').addEventListener('click', () => this.togglePause());
     this.bindInput();
   }
@@ -1848,15 +1868,16 @@ class DeliveryGame{
   leave(){ runner.halt(); }
   difficulty(){ return clamp(this.score/this.goal, 0, 1); }
   reset(){
-    this.player.x = 200; this.player.tx = 200; this.player.tilt = 0;
-    this.items = []; this.floaters = []; this.parts = [];
-    this.spawnT = .4; this.combo = 0; this.mult = 1;
-    this.mvL = this.mvR = false; this.paused = true; this.shake = 0;
+    this.items = []; this.halves = []; this.parts = []; this.floaters = [];
+    this.trail = []; this._last = null;
+    this.comboN = 0; this.comboT = 0; this.spawnT = .55;
+    this.playT = 0; this.dying = 0;
+    this.paused = true; this.shake = 0; this.flash = 0;
     this.updateHud();
   }
   intro(){
     this.ov.show({
-      title:'Entregas expressas', sub:'cartas somam · tesouras cortam · não deixe cair',
+      title:'Lapso de cartas', sub:'deslize rápido para abrir · carta no chão custa vida · bomba encerra',
       btn:'começar',
       onBtn:()=>{ this.paused=false; },
       skip:()=>gotoNext('screen-delivery')
@@ -1865,111 +1886,148 @@ class DeliveryGame{
   loop(){
     runner.run((dt,t) => { if(!this.paused) this.update(dt); this.draw(t); });
   }
-  spawn(){
-    const d = this.difficulty(), r = Math.random();
-    let kind = 'env';
-    if(r < .10) kind = 'scissors';
-    else if(r < .22) kind = 'returned';
-    else if(r < .30) kind = 'seal';
-    else if(r < .45) kind = 'postcard';
-    const speed = rand(120,150) + 200*d + (kind==='scissors' ? 70 : 0);
-    this.items.push({
-      kind, x: rand(30,370), y: -22, vy: speed, t: 0,
-      swayA: kind==='scissors' ? rand(0,8) : rand(14,34),
-      swayF: rand(1.2,2.4), ph: rand(0,6.28),
-      rot: rand(-.4,.4), vr: rand(-1.2,1.2)
-    });
+  wave(d){
+    const n = Math.min(3, 1 + ((Math.random()*(1.5+d*1.8))|0));
+    let bombUsed = false;
+    for(let i=0;i<n;i++){
+      const isBomb = !bombUsed && this.playT > 5 && Math.random() < .05 + .17*d;
+      if(isBomb) bombUsed = true;
+      let kind = 'env';
+      if(!isBomb){
+        const r = Math.random();
+        kind = r < .12 ? 'seal' : r < .42 ? 'postcard' : 'env';
+      }
+      const x = rand(45, 355), peak = rand(210, 330);
+      this.items.push({
+        kind, x, y: 435,
+        vx: rand(-26, 26) + (200-x)*.22,
+        vy: -Math.sqrt(2*this.grav*peak),
+        r: 21, rot: rand(-.5, .5), vrot: rand(-2.2, 2.2)
+      });
+    }
   }
   update(dt){
-    const d = this.difficulty(), p = this.player;
-    if(this.mvL || keys.l) p.tx -= 430*dt;
-    if(this.mvR || keys.r) p.tx += 430*dt;
-    p.tx = clamp(p.tx, 50, 350);
-    const prev = p.x;
-    p.x += (p.tx - p.x) * Math.min(1, dt*14);
-    const tiltTarget = clamp((p.x - prev) / (dt || .016) * .0009, -.2, .2);
-    p.tilt += (tiltTarget - p.tilt) * Math.min(1, dt*10);
+    if(this.dying){ // contagem da explosão antes do game over
+      this.world(dt);
+      this.dying -= dt;
+      if(this.dying <= 0){
+        this.dying = 0; this.paused = true;
+        this.ov.show({
+          title:'A carta-bomba', sub:'abrir correspondência suspeita é falta grave',
+          btn:'tentar de novo',
+          onBtn:()=>{ this.score=0; this.lives=3; this.reset(); this.paused=false; }
+        });
+      }
+      return;
+    }
+    this.playT += dt;
+    const d = this.difficulty();
     this.spawnT -= dt;
     if(this.spawnT <= 0){
-      this.spawnT = rand(.55,.95) - .42*d;
-      this.spawn();
+      this.spawnT = rand(.85, 1.3) - .45*d;
+      this.wave(d);
     }
-    const catchY = 352;
-    this.items = this.items.filter(it => {
-      it.t += dt; it.y += it.vy*dt; it.rot += it.vr*dt;
-      it.dx = Math.sin(it.t*it.swayF + it.ph) * it.swayA;
-      const ix = it.x + it.dx;
-      if(it.y > catchY-12 && it.y < catchY+26 && Math.abs(ix - p.x) < p.w/2 + 12){
-        this.collect(it, ix);
-        return false;
+    this.world(dt);
+    if(this.comboT > 0){
+      this.comboT -= dt;
+      if(this.comboT <= 0) this.closeCombo();
+    }
+  }
+  world(dt){
+    for(let i=this.items.length-1; i>=0; i--){
+      const it = this.items[i];
+      it.vy += this.grav*dt;
+      it.x += it.vx*dt; it.y += it.vy*dt; it.rot += it.vrot*dt;
+      if(it.y > 470){
+        this.items.splice(i,1);
+        if(!this.dying && it.kind !== 'bomb') this.dropped(it);
       }
-      if(it.y > 430){
-        if(it.kind==='env' || it.kind==='postcard' || it.kind==='seal') this.missed(it, ix);
-        return false;
-      }
-      return true;
-    });
-    this.floaters = this.floaters.filter(f => { f.y -= 34*dt; f.a -= dt*1.1; return f.a > 0; });
+    }
+    for(let i=this.halves.length-1; i>=0; i--){
+      const h = this.halves[i];
+      h.vy += this.grav*dt;
+      h.x += h.vx*dt; h.y += h.vy*dt; h.rot += h.vrot*dt;
+      if(h.y > 470) this.halves.splice(i,1);
+    }
     this.parts = this.parts.filter(pp => {
-      pp.vy += 520*dt; pp.x += pp.vx*dt; pp.y += pp.vy*dt; pp.a -= dt*2;
+      pp.vy += 460*dt; pp.x += pp.vx*dt; pp.y += pp.vy*dt;
+      pp.rot += pp.vr*dt; pp.a -= dt*1.8;
       return pp.a > 0;
     });
+    this.floaters = this.floaters.filter(f => { f.y -= 34*dt; f.a -= dt*1.1; return f.a > 0; });
     this.shake = Math.max(0, this.shake - dt);
+    this.flash = Math.max(0, this.flash - dt*1.6);
   }
-  collect(it, ix){
-    const p = this.player;
-    if(it.kind === 'scissors'){
-      this.lives--; this.combo = 0; this.mult = 1; this.shake = .5;
-      SFX.err();
-      this.burst(ix, catchYpos(), '#b1372b', 14);
-      this.floaters.push({x:ix, y:328, text:'−1 vida', color:'#b1372b', a:1});
-      this.updateHud();
-      if(this.lives <= 0) this.die();
-      return;
+  slash(a, b){
+    const ang = Math.atan2(b.y-a.y, b.x-a.x);
+    for(let i=this.items.length-1; i>=0; i--){
+      const it = this.items[i];
+      if(slashHits(a, b, it.x, it.y, it.r+10)){
+        this.items.splice(i,1);
+        if(it.kind === 'bomb'){ this.explode(it); return; }
+        this.openItem(it, ang);
+      }
     }
-    if(it.kind === 'returned'){
-      this.score = Math.max(0, this.score - 30);
-      this.combo = 0; this.mult = 1;
-      SFX.err();
-      this.floaters.push({x:ix, y:328, text:'−30 · devolvido ao remetente', color:'#8c2920', a:1});
-      this.updateHud();
-      return;
+  }
+  openItem(it, ang){
+    const base = it.kind==='seal' ? 40 : it.kind==='postcard' ? 25 : 10;
+    this.score += base;
+    this.comboN++; this.comboT = .55;
+    SFX.tear();
+    const perp = {x:-Math.sin(ang), y:Math.cos(ang)};
+    for(const s of [1,-1]){
+      this.halves.push({
+        kind: it.kind, x: it.x, y: it.y,
+        vx: it.vx*.5 + perp.x*130*s, vy: it.vy*.4 + perp.y*130*s - 60,
+        rot: ang, side: s, vrot: rand(1.6, 4.2)*s
+      });
     }
-    const base = it.kind === 'seal' ? 40 : it.kind === 'postcard' ? 25 : 10;
-    this.combo++;
-    if(this.combo % 5 === 0 && this.mult < 4){
-      this.mult++;
-      this.floaters.push({x:p.x, y:300, text:'sequência ×'+this.mult, color:'#5f7048', a:1});
-      SFX.blip(1240,.14,.05);
+    const paper = it.kind==='seal' ? '#bd8f34' : it.kind==='postcard' ? '#3d5160' : '#fbf6e7';
+    for(let i=0;i<11;i++){
+      const a2 = ang + rand(-1,1), sp = rand(50,230);
+      this.parts.push({x:it.x, y:it.y, vx:Math.cos(a2)*sp, vy:Math.sin(a2)*sp-50, rot:rand(0,6.28), vr:rand(-9,9), s:rand(2,4.5), a:1, color: paper});
     }
-    const pts = base * this.mult;
-    this.score += pts;
-    SFX.blip(620 + base*6, .09, .05);
-    this.floaters.push({
-      x:ix, y:332,
-      text:'+'+pts+(this.mult>1 ? ' ×'+this.mult : ''),
-      color: it.kind==='seal' ? '#bd8f34' : '#5f7048', a:1
-    });
-    this.burst(ix, 348, it.kind==='seal' ? '#bd8f34' : '#5f7048', 7);
+    if(it.kind === 'env'){ // estilhaços do lacre de cera
+      for(let i=0;i<3;i++)
+        this.parts.push({x:it.x, y:it.y+3, vx:rand(-70,70), vy:rand(-120,-30), rot:0, vr:rand(-6,6), s:rand(2,3.5), a:1, color:'#b1372b'});
+    }
+    this.floaters.push({x:clamp(it.x,50,350), y:it.y, text:'+'+base, color: it.kind==='seal'?'#bd8f34':'#5f7048', a:1});
     this.updateHud();
     if(this.score >= this.goal) this.finish();
   }
-  missed(it, ix){
-    if(this.mult > 1 || this.combo >= 3)
-      this.floaters.push({x:ix, y:390, text:'caiu… sequência perdida', color:'#77695a', a:1});
-    else
-      this.floaters.push({x:ix, y:390, text:'caiu…', color:'#77695a', a:1});
-    this.combo = 0; this.mult = 1;
-    SFX.blip(180,.1,.03);
+  closeCombo(){
+    if(this.comboN >= 3){
+      const bonus = this.comboN*15;
+      this.score += bonus;
+      SFX.blip(1240,.16,.05);
+      this.floaters.push({x:200, y:150, text:`série ×${this.comboN} · +${bonus}`, color:'#5f7048', a:1.4});
+      this.updateHud();
+      if(this.score >= this.goal) this.finish();
+    }
+    this.comboN = 0;
   }
-  burst(x, y, color, n){
-    for(let i=0;i<n;i++)
-      this.parts.push({x, y, vx:rand(-90,90), vy:rand(-160,-40), a:1, color, s:rand(2,4)});
+  dropped(it){
+    this.lives--;
+    this.comboN = 0; this.comboT = 0;
+    SFX.blip(190,.12,.04);
+    this.floaters.push({x:clamp(it.x,60,340), y:384, text:'no chão · −1 vida', color:'#b1372b', a:1});
+    this.updateHud();
+    if(this.lives <= 0) this.die();
+  }
+  explode(it){
+    this.dying = .85;
+    this.shake = .9; this.flash = 1;
+    SFX.err(); SFX.crack();
+    for(let i=0;i<26;i++){
+      const a = rand(0,6.28), sp = rand(60,300);
+      this.parts.push({x:it.x, y:it.y, vx:Math.cos(a)*sp, vy:Math.sin(a)*sp-70, rot:rand(0,6.28), vr:rand(-10,10), s:rand(2,5), a:1, color: i<10 ? '#bd8f34' : '#3a322b'});
+    }
+    this.floaters.push({x:clamp(it.x,60,340), y:it.y-24, text:'BUM!', color:'#b1372b', a:1, big:true});
   }
   die(){
-    this.paused = true;
+    this.paused = true; SFX.err();
     this.ov.show({
-      title:'Game over', sub:'as tesouras venceram esta rodada',
+      title:'Game over', sub:'o chão recolheu correspondência demais',
       btn:'tentar de novo',
       onBtn:()=>{ this.score=0; this.lives=3; this.reset(); this.paused=false; }
     });
@@ -1977,7 +2035,7 @@ class DeliveryGame{
   finish(){
     this.paused = true; SFX.win();
     this.ov.show({
-      title:'Prova cumprida', sub:`${this.score} pontos entregues em bom estado`,
+      title:'Prova cumprida', sub:`${this.score} pontos · tudo aberto com estilo`,
       btn:'continuar', onBtn:()=>gotoNext('screen-delivery')
     });
   }
@@ -1991,26 +2049,42 @@ class DeliveryGame{
     });
   }
   bindInput(){
-    const w = this.wrapper; let down = null;
-    w.addEventListener('pointerdown', e => {
-      down = {x:e.clientX, y:e.clientY, t:performance.now(), moved:false};
-      try{ w.setPointerCapture(e.pointerId); }catch(err){}
-    });
-    w.addEventListener('pointermove', e => {
-      if(!down) return;
-      if(Math.hypot(e.clientX-down.x, e.clientY-down.y) > 12) down.moved = true;
+    // a TELA INTEIRA é a lâmina: o gesto vale em qualquer ponto,
+    // dentro ou fora do tabuleiro (dedo e mouse)
+    const active = () => document.body.dataset.screen === 'delivery';
+    const onUi = e => e.target.closest && e.target.closest('button');
+    const toBoard = e => {
       const r = this.cv.getBoundingClientRect();
-      this.player.tx = clamp((e.clientX-r.left)/r.width*400, 50, 350);
+      return { x:(e.clientX-r.left)/r.width*400, y:(e.clientY-r.top)/r.height*400, t:performance.now() };
+    };
+    window.addEventListener('pointerdown', e => {
+      if(!active() || onUi(e)) return;
+      const p = toBoard(e);
+      this.trail.push(p); this._last = p;
     });
-    w.addEventListener('pointerup', () => { down = null; });
-    w.addEventListener('pointercancel', () => { down = null; });
+    window.addEventListener('pointermove', e => {
+      if(!active()) return;
+      const p = toBoard(e);
+      const prev = this._last;
+      this.trail.push(p);
+      if(this.trail.length > 22) this.trail.shift();
+      if(!this.paused && !this.dying && prev){
+        const dist = Math.hypot(p.x-prev.x, p.y-prev.y);
+        const v = dist / Math.max(1, p.t-prev.t); // px/ms: tem que ser golpe rápido
+        if(dist > 9 && v > .45) this.slash(prev, p);
+      }
+      this._last = p;
+    });
+    const end = () => { this._last = null; };
+    window.addEventListener('pointerup', end);
+    window.addEventListener('pointercancel', end);
   }
   updateHud(){
     this.scoreEl.textContent = `Pontos ${this.score} / ${this.goal}`;
     renderLives(this.livesEl, this.lives);
   }
   draw(t){
-    const c = this.ctx, p = this.player;
+    const c = this.ctx;
     c.clearRect(0,0,400,400);
     c.save();
     if(this.shake > 0) c.translate(rand(-1,1)*7*this.shake, rand(-1,1)*7*this.shake);
@@ -2019,76 +2093,121 @@ class DeliveryGame{
     c.strokeStyle = 'rgba(43,39,36,.05)'; c.lineWidth = 1; c.beginPath();
     for(let y=40; y<400; y+=40){ c.moveTo(0,y+.5); c.lineTo(400,y+.5); }
     c.stroke();
-    // esteira do fundo
+    // linha do chão
     c.strokeStyle = 'rgba(43,39,36,.35)'; c.lineWidth = 2;
     c.beginPath(); c.moveTo(10,392.5); c.lineTo(390,392.5); c.stroke();
-    c.strokeStyle = 'rgba(43,39,36,.2)'; c.lineWidth = 1;
-    c.setLineDash([5,7]);
-    c.beginPath(); c.moveTo(10,398.5); c.lineTo(390,398.5); c.stroke();
-    c.setLineDash([]);
-    // itens
+    // metades rasgadas
+    for(const h of this.halves) this.drawHalf(c, h);
+    // correspondências
     for(const it of this.items) this.drawItem(c, it, t);
-    // partículas
+    // fragmentos de papel
     for(const pp of this.parts){
-      c.globalAlpha = Math.max(0, pp.a);
+      c.save();
+      c.globalAlpha = Math.min(1, Math.max(0, pp.a));
+      c.translate(pp.x, pp.y); c.rotate(pp.rot);
       c.fillStyle = pp.color;
-      c.fillRect(pp.x-pp.s/2, pp.y-pp.s/2, pp.s, pp.s);
-      c.globalAlpha = 1;
+      c.fillRect(-pp.s/2, -pp.s/2, pp.s, pp.s);
+      c.restore();
     }
-    // cesto
-    c.save();
-    c.translate(p.x, 352);
-    c.rotate(p.tilt);
-    const r = p.w/2;
-    // envelope espiando dentro do cesto
-    c.fillStyle = '#fbf6e7';
-    c.fillRect(-13, -14, 26, 12);
-    c.strokeStyle = '#2b2724'; c.lineWidth = 1.3;
-    c.strokeRect(-13, -14, 26, 12);
-    c.beginPath(); c.moveTo(-13,-14); c.lineTo(0,-6); c.lineTo(13,-14); c.stroke();
-    c.fillStyle = '#b1372b';
-    c.beginPath(); c.arc(8, -9, 2.2, 0, 7); c.fill();
-    // corpo do cesto
-    c.beginPath(); c.arc(0, 0, r, 0, Math.PI); c.closePath();
-    c.fillStyle = '#e9dfc4'; c.fill();
-    c.strokeStyle = '#2b2724'; c.lineWidth = 2.5; c.stroke();
-    // vime
-    c.strokeStyle = 'rgba(43,39,36,.3)'; c.lineWidth = 1.2;
-    c.beginPath(); c.arc(0, 0, r*.62, 0, Math.PI); c.stroke();
-    c.beginPath(); c.arc(0, 0, r*.3, 0, Math.PI); c.stroke();
-    // boca
-    c.strokeStyle = '#2b2724'; c.lineWidth = 2.5;
-    c.beginPath(); c.moveTo(-r, 0); c.lineTo(r, 0); c.stroke();
-    c.restore();
-    // selo de sequência
-    if(this.mult > 1){
+    // série no canto
+    if(this.comboN >= 2 && this.comboT > 0){
       c.fillStyle = '#5f7048';
       c.font = '700 10px "IBM Plex Mono", monospace';
       c.textAlign = 'right';
-      c.fillText('sequência ×'+this.mult, 386, 22);
+      c.fillText('série ×'+this.comboN, 386, 22);
     }
     // textos flutuantes
-    c.font = '700 12px "IBM Plex Mono", monospace';
     c.textAlign = 'center';
     for(const f of this.floaters){
-      c.globalAlpha = Math.max(0, f.a);
+      c.globalAlpha = Math.min(1, Math.max(0, f.a));
       c.fillStyle = f.color;
-      c.fillText(f.text, clamp(f.x, 60, 340), f.y);
+      c.font = (f.big ? '800 22px ' : '700 12px ') + '"IBM Plex Mono", monospace';
+      c.fillText(f.text, f.x, f.y);
       c.globalAlpha = 1;
+    }
+    // rastro da lâmina
+    this.drawTrail(c);
+    // clarão da explosão
+    if(this.flash > 0){
+      c.fillStyle = 'rgba(177,55,43,'+(this.flash*.22)+')';
+      c.fillRect(0,0,400,400);
+    }
+    c.restore();
+  }
+  drawTrail(c){
+    const now = performance.now();
+    this.trail = this.trail.filter(p => now - p.t < 140);
+    const pts = this.trail;
+    if(pts.length < 2) return;
+    const pass = (maxW, color) => {
+      const L = [], R = [];
+      for(let i=0;i<pts.length;i++){
+        const a = pts[Math.max(0,i-1)], b = pts[Math.min(pts.length-1,i+1)];
+        let dx = b.x-a.x, dy = b.y-a.y;
+        const d = Math.hypot(dx,dy) || 1; dx/=d; dy/=d;
+        const w = maxW * (i/(pts.length-1));
+        L.push({x:pts[i].x - dy*w, y:pts[i].y + dx*w});
+        R.push({x:pts[i].x + dy*w, y:pts[i].y - dx*w});
+      }
+      c.beginPath();
+      c.moveTo(L[0].x, L[0].y);
+      for(let i=1;i<L.length;i++) c.lineTo(L[i].x, L[i].y);
+      for(let i=R.length-1;i>=0;i--) c.lineTo(R[i].x, R[i].y);
+      c.closePath();
+      c.fillStyle = color; c.fill();
+    };
+    pass(10, 'rgba(177,55,43,.30)');
+    pass(4.5, 'rgba(250,246,232,.92)');
+  }
+  drawHalf(c, h){
+    c.save();
+    c.translate(h.x, h.y);
+    c.rotate(h.rot);
+    c.scale(1, h.side);
+    const w = 27, hh = 20;
+    const body = h.kind==='postcard' ? '#3d5160' : h.kind==='seal' ? '#bd8f34' : '#332a24';
+    // corpo com a base em zigzag (o rasgo)
+    c.beginPath();
+    c.moveTo(-w/2, -hh/2);
+    c.lineTo(w/2, -hh/2);
+    c.lineTo(w/2, 0);
+    const segs = 6;
+    for(let i=1;i<=segs;i++) c.lineTo(w/2 - w*i/segs, (i%2===0) ? 0 : 3.2);
+    c.closePath();
+    c.fillStyle = body; c.fill();
+    c.strokeStyle = '#2b2724'; c.lineWidth = 1.4; c.stroke();
+    if(h.kind === 'env'){
+      // carta por dentro espiando
+      c.fillStyle = '#e8ddc2';
+      c.fillRect(-w/2+3, -hh/2+3, w-6, 7);
+      c.strokeStyle = 'rgba(43,39,36,.4)'; c.lineWidth = .8;
+      c.beginPath(); c.moveTo(-w/2+5,-hh/2+6.5); c.lineTo(w/2-5,-hh/2+6.5); c.stroke();
+      // pedaço do lacre
+      c.fillStyle = '#b1372b';
+      c.beginPath(); c.arc(2, -3, 3.2, 0, 7); c.fill();
+    } else if(h.kind === 'seal'){
+      c.fillStyle = '#f2e9d4';
+      c.beginPath(); c.arc(0, -4, 5.5, 0, 7); c.fill();
+    } else if(h.kind === 'postcard'){
+      c.fillStyle = '#bd8f34';
+      c.fillRect(w/2-10, -hh/2+3, 6, 6);
     }
     c.restore();
   }
   drawItem(c, it, t){
     c.save();
-    c.translate(it.x + (it.dx||0), it.y);
-    c.rotate(it.kind === 'returned' ? it.rot*.5 : it.rot*.7);
+    c.translate(it.x, it.y);
+    c.rotate(it.rot);
     if(it.kind === 'env'){
+      c.fillStyle = 'rgba(58,48,35,.15)'; c.fillRect(-11,-6,26,18);
       c.fillStyle = '#fbf6e7'; c.fillRect(-13,-9,26,18);
       c.strokeStyle = '#2b2724'; c.lineWidth = 1.5;
       c.strokeRect(-13,-9,26,18);
       c.beginPath(); c.moveTo(-13,-9); c.lineTo(0,1); c.lineTo(13,-9); c.stroke();
-      c.fillStyle = '#b1372b';
-      c.beginPath(); c.arc(-7, 5, 2.2, 0, 7); c.fill();
+      // lacre de cera — o alvo do corte
+      c.fillStyle = '#b1372b'; c.beginPath(); c.arc(0,4.5,4.6,0,7); c.fill();
+      c.strokeStyle = '#8c2920'; c.lineWidth = 1; c.stroke();
+      c.fillStyle = 'rgba(250,240,220,.55)'; c.beginPath(); c.arc(-1.4,3,1.3,0,7); c.fill();
     } else if(it.kind === 'postcard'){
       c.fillStyle = '#3d5160'; c.fillRect(-14,-10,28,20);
       c.strokeStyle = 'rgba(250,246,232,.7)'; c.lineWidth = 1.2;
@@ -2100,40 +2219,37 @@ class DeliveryGame{
       c.rotate(t*.002);
       c.fillStyle = '#bd8f34'; c.fillRect(-11,-11,22,22);
       c.strokeStyle = '#8a6a20'; c.lineWidth = 1.5;
-      c.setLineDash([2,2]);
-      c.strokeRect(-13,-13,26,26);
-      c.setLineDash([]);
-      c.fillStyle = '#f2e9d4';
-      c.beginPath(); c.arc(0,0,7.5,0,7); c.fill();
+      c.setLineDash([2,2]); c.strokeRect(-13,-13,26,26); c.setLineDash([]);
+      c.fillStyle = '#f2e9d4'; c.beginPath(); c.arc(0,0,7.5,0,7); c.fill();
       c.fillStyle = '#8a6a20';
       c.font = 'italic 700 10px Georgia, serif';
       c.textAlign = 'center';
       c.fillText('K', 0, 3.5);
-    } else if(it.kind === 'returned'){
-      c.fillStyle = 'rgba(177,55,43,.92)'; c.fillRect(-17,-10,34,20);
-      c.strokeStyle = '#8c2920'; c.lineWidth = 1.5;
-      c.strokeRect(-17,-10,34,20);
-      c.fillStyle = '#f7ead6';
-      c.font = '700 7px "IBM Plex Mono", monospace';
+    } else { // carta-bomba
+      c.rotate(Math.sin(t*.004)*.12);
+      c.fillStyle = '#332a24'; c.fillRect(-13,-9,26,18);
+      c.strokeStyle = 'rgba(250,246,232,.6)'; c.lineWidth = 1.5;
+      c.strokeRect(-13,-9,26,18);
+      c.fillStyle = '#bd8f34';
+      c.font = '800 12px "IBM Plex Mono", monospace';
       c.textAlign = 'center';
-      c.fillText('DEVOLVIDO', 0, 2.5);
-    } else if(it.kind === 'scissors'){
-      c.lineCap = 'round';
-      c.strokeStyle = '#3f4850'; c.lineWidth = 5;
-      c.beginPath();
-      c.moveTo(-2,0); c.lineTo(18,-7);
-      c.moveTo(-2,0); c.lineTo(18,7);
-      c.stroke();
-      c.fillStyle = '#2b2724';
-      c.beginPath(); c.arc(-1,0,2.6,0,7); c.fill();
-      c.strokeStyle = '#2b2724'; c.lineWidth = 3.5;
-      c.beginPath(); c.arc(-11,-7,6,0,7); c.stroke();
-      c.beginPath(); c.arc(-11,7,6,0,7); c.stroke();
+      c.fillText('!', 0, 4);
+      // pavio aceso
+      c.strokeStyle = '#c9bfa8'; c.lineWidth = 2.2;
+      c.beginPath(); c.moveTo(0,-9); c.quadraticCurveTo(6,-17,11,-14); c.stroke();
+      c.save();
+      c.translate(11,-14); c.rotate(t*.02);
+      c.strokeStyle = '#bd8f34'; c.lineWidth = 1.6;
+      for(let i=0;i<5;i++){
+        const a = i/5*6.283;
+        c.beginPath(); c.moveTo(Math.cos(a)*2.5, Math.sin(a)*2.5); c.lineTo(Math.cos(a)*6.5, Math.sin(a)*6.5); c.stroke();
+      }
+      c.fillStyle = '#f2e9d4'; c.beginPath(); c.arc(0,0,1.8,0,7); c.fill();
+      c.restore();
     }
     c.restore();
   }
 }
-function catchYpos(){ return 352; }
 
 const snake = new SnakeGame();
 const bricks = new BricksGame();
@@ -2259,7 +2375,7 @@ function showLine(){
 }
 function finishLine(){
   clearInterval(dlTick); clearTimeout(dlTimer);
-  $('dialogue-line').querySelectorAll('.ch').forEach(s => { s.classList.add('instant','in'); });
+  $('dialogue-line').querySelectorAll('.ch').forEach(s => s.classList.add('instant','in'));
   dlDone = true;
   $('dialogue-hint').classList.add('visible');
 }
@@ -2330,38 +2446,35 @@ env.addEventListener('click', tapSeal);
 env.addEventListener('keydown', e => {
   if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); tapSeal(); }
 });
- $('btn-open-gift').addEventListener('click', () => {
-  if(env.classList.contains('open') || env.classList.contains('broken')) return;
-  env.classList.add('open');
-  SFX.crack();
-  const r = sealRect();
-  confetti(r.x, r.y, 18);
-  setTimeout(() => transitionTo('screen-home','screen-captcha'), 1500);
-});
-
  $('screen-secret-intro').addEventListener('click', () => {
-  SFX.blip();
   transitionTo('screen-secret-intro','screen-secret-list');
 });
 function revealSecretList(){
-  const c = $('secret-list-container');
-  c.classList.remove('revealed');
-  void c.offsetWidth;
-  requestAnimationFrame(() => requestAnimationFrame(() => c.classList.add('revealed')));
-}
+  const paper = $('secret-list-container');
+  if(!paper) return;
 
+  requestAnimationFrame(() => {
+    paper.classList.add('revealed');
+  });
+}
 /* ============================================================
    BOOT
+   ATENÇÃO: o arquivo original veio cortado exatamente antes
+   deste bloco (no keydown do envelope acima). Reconstruí o
+   fechamento com o comportamento esperado — se no seu arquivo
+   original havia algo diferente aqui (mensagem extra, efeito,
+   etc.), é só substituir este bloco pelo trecho original.
    ============================================================ */
  $('btn-audio-start').addEventListener('click', () => {
   audio.init();
   audioStarted = true;
-  audio.play('calm');
   SFX.blip();
   transitionTo('screen-audio','screen-home');
 });
-document.body.dataset.screen = 'audio';
-updateTracker('screen-audio');
+ $('btn-open-gift').addEventListener('click', () => {
+  SFX.blip();
+  transitionTo('screen-home','screen-captcha');
+});
 </script>
 </body>
 </html>
